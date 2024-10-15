@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/declarant-api-gateway/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/declarant-api-gateway/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/declarant-api-gateway",
+  "projects": {
+    "declarant-api-gateway": {
+      "type": "application",
+      "root": "apps/declarant-api-gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/declarant-api-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/declarant-api-gateway/tsconfig.app.json"
+      }
+    },
+    "master": {
+      "type": "application",
+      "root": "apps/master",
+      "entryFile": "main",
+      "sourceRoot": "apps/master/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/master/tsconfig.app.json"
+      }
+    },
+    "sec-bridge": {
+      "type": "application",
+      "root": "apps/sec-bridge",
+      "entryFile": "main",
+      "sourceRoot": "apps/sec-bridge/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/sec-bridge/tsconfig.app.json"
+      }
+    },
+    "contracts": {
+      "type": "library",
+      "root": "libs/contracts",
+      "entryFile": "index",
+      "sourceRoot": "libs/contracts/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/contracts/tsconfig.lib.json"
+      }
+    }
+  }
+}
