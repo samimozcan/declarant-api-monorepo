@@ -25,5 +25,7 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - DATABASE_URL_SEC=${DATABASE_URL_SEC}
       - DATABASE_URL_MASTER=${DATABASE_URL_MASTER}
-    extra_hosts:
-      - "localhost:127.0.0.1"
+
+networks:
+  app-network:
+    driver: bridge

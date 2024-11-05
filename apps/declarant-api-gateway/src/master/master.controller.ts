@@ -9,4 +9,9 @@ export class MasterController {
   findAll() {
     return this.masterService.findAll();
   }
+
+  @Get('just-hello')
+  justHello() {
+    return this.masterService.justHello();
+  }
 }

@@ -9,7 +9,10 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       {
         name: 'MASTER_SERVICE',
         transport: Transport.TCP,
-        options: { port: 3001 },
+        options: {
+          host: process.env.ENV !== undefined ? 'master-service' : 'localhost',
+          port: 3001,
+        },
       },
     ]),
   ],

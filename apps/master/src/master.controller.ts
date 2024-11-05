@@ -11,6 +11,12 @@ export class MasterController {
     return this.masterService.getHello();
   }
 
+  @MessagePattern('master.justHello')
+  justHello(): string {
+    console.log('just hello in master controller');
+    return 'Just hello';
+  }
+
   @EventPattern('master.setHello')
   setHello(data: string) {
     this.masterService.setHello(data);

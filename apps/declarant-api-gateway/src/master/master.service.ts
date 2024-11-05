@@ -8,4 +8,9 @@ export class MasterService {
   findAll() {
     return this.masterService.send('master.getHello', {});
   }
+
+  justHello() {
+    console.log('justHello');
+    return this.masterService.send<string>('master.justHello', {});
+  }
 }

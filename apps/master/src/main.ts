@@ -8,6 +8,7 @@ async function bootstrap() {
     {
       transport: Transport.TCP,
       options: {
+        host: process.env.ENV !== undefined ? 'master-service' : 'localhost',
         port: 3001,
       },
     },
