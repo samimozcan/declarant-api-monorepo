@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  declarant-api-gateway:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL_SEC=${DATABASE_URL_SEC}
+      - DATABASE_URL_MASTER=${DATABASE_URL_MASTER}
+    depends_on:
+      - master-service
+
+  master-service:
+    image: master-service:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.master
+    ports:
+      - '3001:3001'
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL_SEC=${DATABASE_URL_SEC}
+      - DATABASE_URL_MASTER=${DATABASE_URL_MASTER}
+    extra_hosts:
+      - "localhost:127.0.0.1"
