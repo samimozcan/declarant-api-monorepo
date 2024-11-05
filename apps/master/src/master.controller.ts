@@ -7,7 +7,7 @@ export class MasterController {
   constructor(private readonly masterService: MasterService) {}
 
   @MessagePattern('master.getHello')
-  getHello(): string {
+  getHello(): Promise<string> {
     return this.masterService.getHello();
   }
 

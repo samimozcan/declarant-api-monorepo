@@ -18,12 +18,10 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/contracts": [
-        "libs/contracts/src"
-      ],
-      "@app/contracts/*": [
-        "libs/contracts/src/*"
-      ]
+      "@app/ogi-prisma": ["libs/ogi-prisma/src"],
+      "@app/ogi-prisma/*": ["libs/ogi-prisma/src/*"],
+      "@app/master-prisma": ["libs/master-prisma/src"],
+      "@app/master-prisma/*": ["libs/master-prisma/src/*"]
     }
   }
 }

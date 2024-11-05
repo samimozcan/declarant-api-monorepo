@@ -8,7 +8,7 @@ export class DeclarantApiGatewayController {
   ) {}
 
   @Get()
-  getHello(): string {
+  getHello(): Promise<string> {
     return this.declarantApiGatewayService.getHello();
   }
 }

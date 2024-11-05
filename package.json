@@ -24,6 +24,8 @@
     "@nestjs/core": "^10.0.0",
     "@nestjs/microservices": "^10.4.4",
     "@nestjs/platform-express": "^10.0.0",
+    "@prisma/client": "^5.21.1",
+    "prisma": "^5.21.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },
@@ -71,7 +73,8 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/contracts(|/.*)$": "<rootDir>/libs/contracts/src/$1"
+      "^@app/ogi-prisma(|/.*)$": "<rootDir>/libs/ogi-prisma/src/$1",
+      "^@app/master-prisma(|/.*)$": "<rootDir>/libs/master-prisma/src/$1"
     }
   }
 }

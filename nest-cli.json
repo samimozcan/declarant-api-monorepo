@@ -37,13 +37,22 @@
         "tsConfigPath": "apps/sec-bridge/tsconfig.app.json"
       }
     },
-    "contracts": {
+    "ogi-prisma": {
       "type": "library",
-      "root": "libs/contracts",
+      "root": "libs/ogi-prisma",
       "entryFile": "index",
-      "sourceRoot": "libs/contracts/src",
+      "sourceRoot": "libs/ogi-prisma/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/contracts/tsconfig.lib.json"
+        "tsConfigPath": "libs/ogi-prisma/tsconfig.lib.json"
+      }
+    },
+    "master-prisma": {
+      "type": "library",
+      "root": "libs/master-prisma",
+      "entryFile": "index",
+      "sourceRoot": "libs/master-prisma/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/master-prisma/tsconfig.lib.json"
       }
     }
   }

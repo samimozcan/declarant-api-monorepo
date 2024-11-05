@@ -1,0 +1,188 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Certificate {
+  id             String    @id @db.Uuid @map("id")
+  documentType   String?   @map("documenttype")
+  jobOrderId     String    @db.Uuid @map("joborderid")
+  document       Json?     @map("document")
+  version        String?   @map("version")
+  status         Int?      @map("status")
+  statusTracking Json      @map("statustracking")
+  requestId      String?   @db.Uuid @map("requestid")
+  createdAt      DateTime? @db.Timestamptz(6) @map("createdat")
+  updatedAt      DateTime? @db.Timestamptz(6) @map("updatedat")
+
+  @@map("certificate")
+}
+
+model Declaration {
+  id               String    @id @db.Uuid @map("id")
+  jobOrderId       String?   @db.Uuid @map("joborderid")
+  document         Json?     @map("document")
+  version          String    @map("version")
+  registrationDate DateTime? @db.Timestamptz(6) @map("registrationdate")
+  status           Int?      @map("status")
+  userName         String?   @map("username")
+  statusTracking   Json      @map("statustracking")
+  requestId        String?   @db.Uuid @map("requestid")
+  createdAt        DateTime? @db.Timestamptz(6) @map("createdat")
+  updatedAt        DateTime? @db.Timestamptz(6) @map("updatedat")
+
+  @@map("declaration")
+}
+
+model ExportJobOrder {
+  id                              String    @id @db.Uuid @map("id")
+  jobOrderType                    String    @map("jobordertype")
+  owners                          Json      @map("owners")
+  consignorName                   String?   @map("consignorname")
+  consignorId                     String?   @map("consignorid")
+  consigneeName                   String?   @map("consigneename")
+  customerReference1              String?   @map("customerreference1")
+  customerReference2              String?   @map("customerreference2")
+  customerReference3              String?   @map("customerreference3")
+  declarationResponsibleReference String?   @map("declarationresponsiblereference")
+  consigneeId                     String?   @map("consigneeid")
+  reqDocument                     Json?     @map("reqdocument")
+  document                        Json?     @map("document")
+  version                         String    @map("version")
+  status                          Int?      @map("status")
+  userName                        String?   @map("username")
+  relations                       Json?     @map("relations")
+  vehicleInformation              Json?     @map("vehicleinformation")
+  statusTracking                  Json      @map("statustracking")
+  requestId                       String?   @db.Uuid @map("requestid")
+  createdAt                       DateTime? @default(now()) @db.Timestamptz(6) @map("createdat")
+  updatedAt                       DateTime? @default(now()) @db.Timestamptz(6) @map("updatedat")
+
+  @@map("exportjoborder")
+}
+
+model File {
+  id               String    @id @db.Uuid @map("id")
+  jobOrderId       String    @db.Uuid @map("joborderid")
+  fileName         String    @map("filename")
+  fileBusinessType String    @map("filebusinesstype")
+  data             Bytes?    @map("data")
+  fileType         String    @map("filetype")
+  createdAt        DateTime  @db.Timestamptz(6) @map("createdat")
+  updatedAt        DateTime? @db.Timestamptz(6) @map("updatedat")
+
+  @@map("file")
+}
+
+model History {
+  id             Int       @id @default(autoincrement()) @map("id")
+  schema         String?   @map("schema")
+  documentName   String?   @map("documentname")
+  documentId     String?   @map("documentid")
+  registerAt     DateTime? @db.Timestamptz(6) @map("registerat")
+  operation      String?   @map("operation")
+  documentData   Json?     @map("documentdata")
+  registerAtUnix Float?    @map("registeratunix")
+
+  @@map("history")
+}
+
+model ImportCertificate {
+  id             String    @id @db.Uuid @map("id")
+  documentType   String?   @map("documenttype")
+  jobOrderId     String    @db.Uuid @map("joborderid")
+  document       Json?     @map("document")
+  version        String?   @map("version")
+  status         Int?      @map("status")
+  statusTracking Json      @map("statustracking")
+  requestId      String?   @db.Uuid @map("requestid")
+  createdAt      DateTime? @db.Timestamptz(6) @map("createdat")
+  updatedAt      DateTime? @db.Timestamptz(6) @map("updatedat")
+
+  @@map("importcertificate")
+}
+
+model ImportDeclaration {
+  id               String    @id @db.Uuid @map("id")
+  jobOrderId       String?   @db.Uuid @map("joborderid")
+  document         Json?     @map("document")
+  version          String    @map("version")
+  registrationDate DateTime? @db.Timestamptz(6) @map("registrationdate")
+  status           Int?      @map("status")
+  userName         String?   @map("username")
+  statusTracking   Json      @map("statustracking")
+  requestId        String?   @db.Uuid @map("requestid")
+  createdAt        DateTime? @db.Timestamptz(6) @map("createdat")
+  updatedAt        DateTime? @db.Timestamptz(6) @map("updatedat")
+
+  @@map("importdeclaration")
+}
+
+model ImportFile {
+  id               String    @id @db.Uuid @map("id")
+  jobOrderId       String    @db.Uuid @map("joborderid")
+  fileName         String    @map("filename")
+  fileBusinessType String    @map("filebusinesstype")
+  data             Bytes?    @map("data")
+  fileType         String    @map("filetype")
+  createdAt        DateTime  @db.Timestamptz(6) @map("createdat")
+  updatedAt        DateTime? @db.Timestamptz(6) @map("updatedat")
+
+  @@map("importfile")
+}
+
+model ImportJobOrder {
+  id                              String    @id @db.Uuid @map("id")
+  jobOrderType                    String    @map("jobordertype")
+  owners                          Json      @map("owners")
+  consignorName                   String?   @map("consignorname")
+  consignorId                     String?   @map("consignorid")
+  consigneeName                   String?   @map("consigneename")
+  customerReference1              String?   @map("customerreference1")
+  customerReference2              String?   @map("customerreference2")
+  customerReference3              String?   @map("customerreference3")
+  declarationResponsibleReference String?   @map("declarationresponsiblereference")
+  consigneeId                     String?   @map("consigneeid")
+  reqDocument                     Json?     @map("reqdocument")
+  document                        Json?     @map("document")
+  version                         String    @map("version")
+  status                          Int?      @map("status")
+  userName                        String?   @map("username")
+  relations                       Json?     @map("relations")
+  vehicleInformation              Json?     @map("vehicleinformation")
+  statusTracking                  Json      @map("statustracking")
+  requestId                       String?   @db.Uuid @map("requestid")
+  createdAt                       DateTime? @db.Timestamptz(6) @map("createdat")
+  updatedAt                       DateTime? @db.Timestamptz(6) @map("updatedat")
+
+  @@map("importjoborder")
+}
+
+model Migration {
+  id        Int       @id @map("id")
+  createdAt DateTime? @db.Timestamptz(6) @map("createdat")
+
+  @@map("migration")
+}
+
+model T1 {
+  ownerId   String?   @map("ownerid")
+  readers   String?   @map("readers")
+  writers   String?   @map("writers")
+  deleters  String?   @map("deleters")
+  requestId String?   @db.Uuid @map("requestid")
+  createdAt DateTime? @db.Timestamptz(6) @map("createdat")
+  updatedAt DateTime? @db.Timestamptz(6) @map("updatedat")
+  id        String    @id @db.Uuid @map("id")
+  document  Json      @map("document")
+  mrnNumber String    @map("mrnnumber")
+  version   String?   @map("version")
+  status    Int?      @map("status")
+  relations Json?     @map("relations")
+
+  @@map("t1")
+}

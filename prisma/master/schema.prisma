@@ -1,0 +1,417 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../node_modules/.prisma/master-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL_MASTER")
+}
+
+model Migration {
+  id        Int       @id
+  createdAt DateTime? @map("createdat") @db.Timestamptz(6)
+
+  @@map("migration")
+}
+
+model AdditionalDocuments {
+  id          String  @id
+  description String?
+
+  @@map("additionaldocuments")
+}
+
+model Bank {
+  id   String @id
+  name String
+
+  @@map("bank")
+}
+
+model CertificateDefinition {
+  id              Int    @id @default(autoincrement())
+  clientId        Int    @map("client_id")
+  certificateType String @map("certificate_type")
+  countryCode     String @map("country_code")
+
+  @@map("certificate_definition")
+}
+
+model City {
+  id          Int     @id @default(autoincrement())
+  name        String
+  stateId     Int     @map("stateid")
+  stateCode   String? @map("statecode")
+  countryId   Int     @map("countryid")
+  countryIso2 String? @map("countryiso2")
+  latitude    String?
+  longitude   String?
+
+  @@map("city")
+}
+
+model Client {
+  id        Int       @id @default(autoincrement())
+  name      String
+  firmId    String    @map("firmid") @db.Uuid
+  createdAt DateTime  @map("createdat") @db.Timestamptz(6)
+  updatedAt DateTime? @map("updatedat") @db.Timestamptz(6)
+
+  @@map("client")
+}
+
+model Container {
+  id            Int    @id @default(autoincrement())
+  containerCode String @map("containercode")
+  countryCode   String @map("countrycode")
+
+  @@map("container")
+}
+
+model Country {
+  id           Int      @id @default(autoincrement())
+  code         String
+  shortName    String   @map("shortname")
+  name         String
+  engName      String?  @map("engname")
+  ftzName      String?  @map("ftzname")
+  euStatus     Boolean? @map("eustatus")
+  medosId      Int?     @map("medosid")
+  iso3         String?
+  phoneCode    String?  @map("phonecode")
+  capital      String?
+  currency     String?
+  states       Json?
+  cities       Json?
+  certificates Json?
+
+  @@map("country")
+}
+
+model Currency {
+  id             String   @id
+  code           String
+  currencyDate   DateTime @map("currencydate") @db.Timestamptz(6)
+  bankDate       DateTime @map("bankdate") @db.Timestamptz(6)
+  name           String
+  forexBuying    Decimal  @map("forexbuying") @db.Decimal(10, 4)
+  forexSelling   Decimal  @map("forexselling") @db.Decimal(10, 4)
+  crossRateUsd   Decimal  @map("crossrateusd") @db.Decimal(10, 4)
+  crossRateOther Decimal  @map("crossrateother") @db.Decimal(10, 4)
+
+  @@map("currency")
+}
+
+model CurrencyType {
+  id      Int    @id @default(autoincrement())
+  medosId Int    @map("medosid")
+  code    String
+  name    String
+
+  @@map("currencytype")
+}
+
+model Customs {
+  id                  Int     @id @default(autoincrement())
+  code                String
+  name                String
+  countryCode         String? @map("countrycode")
+  medosId             Int?    @map("medosid")
+  cityName            String? @map("cityname")
+  transportationTypes Json?   @map("transportationtypes")
+
+  @@map("customs")
+}
+
+model DeliveryType {
+  id   String @id
+  name String
+
+  @@map("deliverytype")
+}
+
+model Department {
+  id      String  @id @db.Uuid
+  code    String
+  name    String
+  email   String?
+  stateId Int?    @map("stateid")
+  cityId  Int?    @map("cityid")
+
+  @@map("department")
+}
+
+model Document {
+  id        String    @id @db.Uuid
+  docType   String    @map("doctype")
+  content   String?
+  createdAt DateTime? @map("createdat") @db.Timestamptz(6)
+  updatedAt DateTime? @map("updatedat") @db.Timestamptz(6)
+  relations Json?
+
+  @@map("document")
+}
+
+model EntryExitReason {
+  id          String  @id
+  explanation String?
+
+  @@map("entryexitreason")
+}
+
+model ErrorMessage {
+  id          String    @id
+  errorGroup  String    @map("error_group")
+  message     Json
+  createdAt   DateTime? @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @map("updated_at") @db.Timestamptz(6)
+  description String?
+  omitFirms   String[]  @map("omit_firms")
+
+  @@map("errormessage")
+}
+
+model Exemptions {
+  id          String  @id
+  explanation String?
+
+  @@map("exemptions")
+}
+
+model Firm {
+  id                   String    @id @db.Uuid
+  ownerId              String    @map("ownerid") @db.Uuid
+  name                 String
+  isActive             Boolean?  @default(true) @map("isactive")
+  code                 String?
+  streetName1          String?   @map("streetname1")
+  streetName2          String?   @map("streetname2")
+  postalCode           String?   @map("postalcode")
+  citySubdivision      String?   @map("citysubdivision")
+  cityId               Int?      @map("cityid")
+  cityName             String?   @map("cityname")
+  stateId              Int?      @map("stateid")
+  stateName            String?   @map("statename")
+  countryId            Int?      @map("countryid")
+  iso2                 String?
+  iso3                 String?
+  countryCode          String?   @map("countrycode")
+  country              String?
+  countryEngName       String?   @map("countryengname")
+  telephone1           String?
+  telephone2           String?
+  telephone3           String?
+  telefax1             String?
+  telefax2             String?
+  email                String?
+  web                  String?
+  tinOffice            String?   @map("tinoffice")
+  tin                  String?
+  nationalDomesticLang String?   @map("nationaldomesticlang")
+  latitude             String?
+  longitude            String?
+  roles                Json?
+  connections          Json?
+  services             Json?
+  createdAt            DateTime? @map("createdat") @db.Timestamptz(6)
+  updatedAt            DateTime? @map("updatedat") @db.Timestamptz(6)
+  apiKeyHeader         String?   @map("apikeyheader")
+  apiKey               String?   @map("apikey")
+  branchId             String?   @map("branchid")
+
+  @@map("firm")
+}
+
+model FirmConfig {
+  id                Int      @id @default(autoincrement())
+  firm              String
+  excludeValidation Json?    @default("{}") @map("exclude_validation")
+  includeValidation Json?    @default("{}") @map("include_validation")
+  isExport          Boolean? @default(false) @map("is_export")
+  isImport          Boolean? @default(false) @map("is_import")
+
+  @@map("firm_config")
+}
+
+model HsCode {
+  id          String @id
+  explanation String
+
+  @@map("hscode")
+}
+
+model ImportErrorMessage {
+  id          String    @id
+  errorGroup  String    @map("error_group")
+  message     Json
+  createdAt   DateTime? @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @map("updated_at") @db.Timestamptz(6)
+  description String?
+  omitFirms   String[]  @map("omit_firms") @db.VarChar
+
+  @@map("importerrormessage")
+}
+
+model MedosDocument {
+  id   String @id
+  name String
+
+  @@map("medosdocument")
+}
+
+model NonTradingTransaction {
+  id   Int    @id
+  name String
+
+  @@map("nontradingtransaction")
+}
+
+model OperatingLicenseIssue {
+  id   Int    @id
+  name String
+
+  @@map("operatinglicenseissue")
+}
+
+model OtherTransactionType {
+  id   Int    @id
+  name String
+
+  @@map("othertransactiontype")
+}
+
+model PackageType {
+  id   String  @id
+  name String?
+
+  @@map("packagetype")
+}
+
+model PaymentMeans {
+  id          String @id
+  explanation String
+
+  @@map("paymentmeans")
+}
+
+model PaymentRate {
+  id      Int     @id
+  name    String
+  ftzName String? @map("ftzname")
+
+  @@map("paymentrate")
+}
+
+model Port {
+  id   String @id
+  name String
+
+  @@map("port")
+}
+
+model Procedure {
+  id          Int    @id
+  import      String
+  export      String
+  description String
+  info1       String
+  info2       String
+
+  @@map("procedure")
+}
+
+model SimplifiedProcedure {
+  id          Int    @id
+  scope       String
+  explanation String
+
+  @@map("simplifiedprocedure")
+}
+
+model Specification {
+  id          String @id
+  description String
+
+  @@map("specification")
+}
+
+model State {
+  id          Int     @id @default(autoincrement())
+  name        String
+  countryId   Int     @map("countryid")
+  countryIso2 String? @map("countryiso2")
+  code        String?
+  cities      Json?
+
+  @@map("state")
+}
+
+model TaxType {
+  id   Int    @id @default(autoincrement())
+  code Int
+  name String
+
+  @@map("taxtype")
+}
+
+model TemporaryEntryExitPurpose {
+  id   Int    @id
+  name String
+
+  @@map("temporaryentryexitpurpose")
+}
+
+model ThreadType {
+  id   String @id
+  name String
+
+  @@map("threadtype")
+}
+
+model TradingTransaction {
+  id   Int    @id
+  name String
+
+  @@map("tradingtransaction")
+}
+
+model TransactionNature {
+  id          Int    @id
+  explanation String
+
+  @@map("transactionnature")
+}
+
+model TransportationType {
+  id         Int    @id
+  name       String
+  mediumCode Int    @map("mediumcode")
+  medium     String
+  ublCode    Int?   @map("ublcode")
+
+  @@map("transportationtype")
+}
+
+model Unit {
+  id       String   @id
+  medosId  Int?     @map("medosid")
+  name     String
+  atStatus Boolean? @map("atstatus")
+
+  @@map("unit")
+}
+
+model UsedGood {
+  id          String @id
+  explanation String
+
+  @@map("usedgood")
+}
+
+model Wrapping {
+  id   Int    @id
+  name String
+
+  @@map("wrapping")
+}
