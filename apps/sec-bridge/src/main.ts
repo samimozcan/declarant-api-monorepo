@@ -8,7 +8,8 @@ async function bootstrap() {
     {
       transport: Transport.TCP,
       options: {
-        host: '3002',
+        host: process.env.ENV !== undefined ? 'sec-service' : 'localhost',
+        port: 3002,
       },
     },
   );

@@ -75,7 +75,8 @@
     ],
     "moduleNameMapper": {
       "^@app/ogi-prisma(|/.*)$": "<rootDir>/libs/ogi-prisma/src/$1",
-      "^@app/master-prisma(|/.*)$": "<rootDir>/libs/master-prisma/src/$1"
+      "^@app/master-prisma(|/.*)$": "<rootDir>/libs/master-prisma/src/$1",
+      "^@app/sec-prisma(|/.*)$": "<rootDir>/libs/sec-prisma/src/$1"
     }
   }
 }

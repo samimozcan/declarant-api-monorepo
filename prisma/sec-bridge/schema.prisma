@@ -1,8 +1,1479 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
+// Define the data source and generator
 datasource db {
   provider = "sqlserver"
   url      = env("DATABASE_URL_SEC")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../node_modules/.prisma/sec-client"
+}
+
+// Convert each TypeScript model class into a Prisma model with table mappings
+
+model SecNctsPackage {
+  id                  String  @id @map("kapid") @db.UniqueIdentifier
+  itemId              String  @map("kalemid") @db.UniqueIdentifier
+  marksOfPackages     String? @map("markanumara")
+  marksOfPackagesLang String? @map("dil")
+  kindOfPackages      String? @map("kaptip")
+  numberOfPackages    Int?    @map("kapadet")
+
+  @@map("ncts_kap")
+}
+
+model SecNctsLog {
+  id              String  @id @map("logid") @db.UniqueIdentifier
+  nctsDocumentId  String  @map("beyannameid") @db.UniqueIdentifier
+  recordId        String? @map("kayitid")
+  messagetype     String? @map("messagetype")
+  customsUserCode String? @map("bilgeuser")
+  xmlRequest      String? @map("xmlrequest")
+  xmlResponse     String? @map("xmlresponse")
+  result          String? @map("sonuc")
+
+  @@map("ncts_log")
+}
+
+model SecNctsJobOrder {
+  id                String    @id @map("isemriid") @db.UniqueIdentifier
+  positionNo        String?   @map("pozisyonno")
+  plateId           String?   @map("plaka")
+  exitCustomsOffice String?   @map("cikisgumrukkod")
+  date              DateTime? @default(now()) @map("tarih")
+  status            String?   @map("durum")
+  insUn             String?   @map("insUn")
+  insDt             DateTime? @default(now()) @map("insDt")
+  updun             String?   @map("updun")
+  upddt             DateTime? @default(now()) @map("upddt")
+  carrierLanguage   String?   @map("nakliyecidilkod")
+  plateLanguage     String?   @map("plakadilkod")
+  plateCountryCode  String?   @map("plakaulkekod")
+
+  @@map("ogiV2_isemri")
+}
+
+model SecNctsJobOrderT1 {
+  id                       String  @id @map("isemrit1id") @db.UniqueIdentifier
+  jobOrderId               String  @map("isemriid") @db.UniqueIdentifier
+  destinationCustomsOffice String? @map("varisgumrukkod")
+  destinationCountryCode   String? @map("varisulkekod")
+  importersBrokerId        String? @map("id") @db.UniqueIdentifier
+  carrierFirmId            String? @map("tasiyicifirmaid") @db.UniqueIdentifier
+  borderTransportMeans     String? @map("tasiyicisekli")
+
+  @@map("ogiV2_isemriT1")
+}
+
+model SecNctsJobOrderT1Detail {
+  id                String    @id @map("isemrit1detayid") @db.UniqueIdentifier
+  jobOrderT1Id      String    @map("isemrit1id") @db.UniqueIdentifier
+  consignorId       String?   @map("gondericiid") @db.UniqueIdentifier
+  consigneeId       String?   @map("aliciid") @db.UniqueIdentifier
+  packageAmount     Int?      @map("kap")
+  weight            Int?      @map("kilo")
+  invoiceId         String?   @map("InvoiceID")
+  plateId           String?   @map("plaka")
+  status            Int?      @map("durum")
+  refId             String?   @map("RefId") @db.UniqueIdentifier
+  documentType      String?   @map("documentType")
+  documentNo        String?   @map("documentNo")
+  documentIssueDate DateTime? @default(now()) @map("documentIssueDate")
+  declarationId     String?   @map("beyannameid") @db.UniqueIdentifier
+
+  @@map("ogiV2_isemriT1detay")
+}
+
+model SecNctsJobOrderRoute {
+  id          String  @id @map("rotaid") @db.UniqueIdentifier
+  jobOrderId  String  @map("isemriid") @db.UniqueIdentifier
+  itemOrderNo Int?    @map("sirano")
+  countryCode String? @map("ulkekod")
+
+  @@map("ogiV2_isemrirota")
+}
+
+model SecNctsItem {
+  id                        String  @id @map("kalemid") @db.UniqueIdentifier
+  nctsDocumentId            String  @map("beyannameid") @db.UniqueIdentifier
+  itemOrderNo               Int?    @map("kalemsirano")
+  procedure                 String? @map("rejim")
+  referenceNo               String? @map("referansno")
+  commodityCode             String? @map("esyakodu")
+  descriptionOfGoods        String? @map("esyatanim")
+  descriptionOfGoodsLang    String? @map("esyatanimdil")
+  countryOfDispatchCode     String? @map("cikisihracatulkekod")
+  countryOfDestinationCode  String? @map("gidecegiulkekod")
+  grossMass                 Int?    @map("burutagirlik")
+  netMass                   Int?    @map("netagirlik")
+  consignorFirmId           String? @map("ihracatcifirmaid") @db.UniqueIdentifier
+  consignorLanguage         String? @map("ihracatcidil")
+  consigneeFirmId           String? @map("alicifirmaid") @db.UniqueIdentifier
+  consigneeLanguage         String? @map("alicidil")
+  consignorSecurityFirmId   String? @map("gondericiguvenlikfirmaid") @db.UniqueIdentifier
+  consignorSecurityLanguage String? @map("gondericiguvenlikdil")
+  consigneeSecurityFirmId   String? @map("aliciguvenlikfirmaid") @db.UniqueIdentifier
+  consigneeSecurityLanguage String? @map("aliciguvenlikdil")
+  undg                      String? @map("undg")
+  tekkonsimentorefno        String? @map("tekkonsimentorefno")
+  exportDeclarationSender   String? @map("ilgilibeyannamegonderici")
+  exportDeclarationNo       String? @map("ilgilibeyannamenumarasi")
+  exportDeclarationType     String? @map("ilgilibbeyannametip")
+  exportDeclarationPartial  String? @map("ilgilibeyannameparcali")
+  tptchmOdeme               String? @map("tptchmodeme")
+  invoiceAmount             Int?    @map("faturatutar")
+  invoiceCurrencyType       String? @map("faturadoviztur")
+  isKiymetDev               String? @map("iskiymetdev")
+  isKiymet                  Int?    @map("iskiymet")
+
+  @@map("ncts_kalem")
+}
+
+model SecNctsGuarantee {
+  id                      String    @id @map("teminatid") @db.UniqueIdentifier
+  nctsDocumentId          String    @map("beyannameid") @db.UniqueIdentifier
+  date                    DateTime? @default(now()) @map("tarih")
+  guaranteeType           String?   @map("teminaturu")
+  guaranteeReference      String?   @map("globalreferansno")
+  otherGuaranteeReference String?   @map("digerteminatreferansno")
+  accessCode              String?   @map("erisimkodu")
+  ecInUse                 String?   @map("ecgecerlidegil")
+  countryInUse            String?   @map("ulkegecerlidegil")
+  currencyType            String?   @map("dovizcinsi")
+  amount                  Int?      @map("tutar")
+  guaranteeDefinitionId   String?   @map("teminattanimid") @db.UniqueIdentifier
+  isClosed                Int?      @map("kapandi")
+
+  @@map("ncts_teminat")
+}
+
+model SecNctsContainer {
+  id              String  @id @map("konteynerid") @db.UniqueIdentifier
+  itemId          String  @map("kalemid") @db.UniqueIdentifier
+  containerNumber String? @map("konteynerno")
+
+  @@map("ncts_konteyner")
+}
+
+model SecNctsAdditionalInformation {
+  id                           String  @id @map("ekbilgiid") @db.UniqueIdentifier
+  itemId                       String  @map("kalemid") @db.UniqueIdentifier
+  additionalInfo               String? @map("ekbilgi")
+  additionalInfoLanguage       String? @map("dil")
+  informationId                String? @map("bilgiid")
+  exportFromEcMeasurement      Int?    @map("ecgostergesindenihracat")
+  exportFromCountryMeasurement String? @map("ulkekodundanihracat")
+
+  @@map("ncts_ekbilgi")
+}
+
+model SecNctsWarehouseDeclaration {
+  id                      String  @id @map("anbeyanid")
+  nctsDocumentId          String  @map("beyannameid")
+  wharehouseDeclarationNo String? @map("anbeyanno")
+  wharehouseItemLineNo    Int?    @map("anbeyankalemno")
+  nctsItemLineNo          Int?    @map("nctskalemno")
+  amount                  Int?    @map("miktar")
+  explanation             String? @map("aciklama")
+  unit                    String? @map("birim")
+  value                   Int?    @map("kiymet")
+  currencyCode            String? @map("dovizkodu")
+  deliveryMeansCode       String? @map("teslimseklikodu")
+  paymentMeansCode        String? @map("odemeseklikodu")
+  procedureType           String? @map("islemniteligikodu")
+  tradeCountryCode        String? @map("ticyapilanulkekod")
+
+  @@map("ncts_anbeyan")
+}
+
+model SecNctsUser {
+  id                      String  @id @map("bilgeuserid")
+  firmId                  String  @map("firmaid")
+  name                    String  @map("ad")
+  bilgeUser               String  @map("bilgeuser")
+  bilgePassword           String  @map("bilgesifre")
+  isActive                Int?    @map("aktif")
+  certificateSerialNo     String? @map("sertifikaserino")
+  certificateLocation     String? @map("sertifikayeri")
+  nctsCertificateSerialNo String? @map("nctssertifikaserino")
+
+  @@map("ncts_bilgeuser")
+}
+
+model SecNctsTransit {
+  id                 String    @id @map("transitid")
+  nctsDocumentId     String    @map("beyannameid")
+  transitCustomsCode String?   @map("transitgumrukkodu")
+  arrivalDate        DateTime? @default(now()) @map("arrivtime")
+
+  @@map("ncts_transit")
+}
+
+model SecNctsT1 {
+  id                                           String    @id @map("beyannameid")
+  personelResponsibleId                        String?   @map("asilsorumlutemsileden")
+  personelResponsibleFirmId                    String?   @map("asilsorumlufirmaid")
+  personelResponsibleLanguage                  String?   @map("asilsorumludil")
+  consigneeSecurityFirmId                      String?   @map("aliciguvenlikfirmaid")
+  consigneeSecurityLanguage                    String?   @map("aliciguvenlikdil")
+  consigneeFirmId                              String?   @map("alicifirmaid")
+  consigneeLanguage                            String?   @map("alicidil")
+  consignorSecurityFirmId                      String?   @map("gondericiguvenlikfirmaid")
+  consignorSecurityLanguage                    String?   @map("gondericiguvenlikdil")
+  consignorFirmId                              String?   @map("ihracatcifirmaid")
+  consignorLanguage                            String?   @map("ihracatcidil")
+  referenceNumber                              String?   @map("lrn")
+  referenceNumberDate                          DateTime? @default(now()) @map("lrntarih")
+  typeOfDeclaration                            String?   @map("rejim")
+  countryOfDestinationCode                     String?   @map("gidecegiulkekod")
+  countryOfDispatchCode                        String?   @map("cikisihracatulkekod")
+  identityOfMeansOfTransportCrossingBorder     String?   @map("siniraracplaka")
+  identityOfMeansOfTransportCrossingBorderLang String?   @map("siniraracdil")
+  transportModeAtBorder                        String?   @map("siniraractasimasekli")
+  nationalityOfMeansOfTransportCrossingBorder  String?   @map("siniraraculkekod")
+  tanker                                       Int?      @map("tanker")
+  localMeansofTransport                        String?   @map("dahildekitasimasekli")
+  authorityLocationOfGoods                     String?   @map("mallarinyetkiliyeri")
+  aggregationLocationOfGoods                   String?   @map("mallarinkarsilastirilanyeri")
+  aggregationLocationOfGoodsCode               String?   @map("mallarinkarsilastirilanyerikod")
+  customsSubPlace                              String?   @map("gumrukaltyeri")
+  placeOfLoadingCode                           String?   @map("yuklemeyeri")
+  identityOfMeansOfTransportAtDeparture        String?   @map("cikisaracplaka")
+  identityOfMeansOfTransportAtDepartureLang    String?   @map("cikisaracdil")
+  nationalityOfMeansOfTransportAtDeparture     String?   @map("cikisaraculkekod")
+  carriersReferenceNumber                      String?   @map("ticarireferansno")
+  containerisedIndicator                       Int?      @map("konteyner")
+  nctsAccompanyingDocLang                      String?   @map("beyandil")
+  totalNumberOfItems                           Int?      @map("kalemsayisi")
+  totalNumberOfPackages                        Int?      @map("toplamkapadet")
+  totalGrossMass                               Int?      @map("toplamburutagirllik")
+  declarationDate                              DateTime? @map("asilsorumlutarih")
+  declarationPlace                             String?   @map("asilsorumluyer")
+  declarationLang                              String?   @map("asilsorumluyertarihdil")
+  placeOfUnloadingCode                         String?   @map("bosaltmayeri")
+  stampDuty                                    Int?      @map("damgavergisi")
+  truckId2                                     String?   @map("dorse1")
+  truckId3                                     String?   @map("dorse2")
+  security                                     String?   @map("guvenlikbeyannamesi")
+  refNumEBT1                                   String?   @map("cikisgumrukidaresi")
+  departureCustomsOfficeReferenceNumber        String?   @map("hareketgumrukidaresi")
+  destinationCustomsOfficeReferenceNumber      String?   @map("varisgumrukidaresi")
+  carrierFirmId                                String?   @map("tasiyicifirmaid")
+  carrierLanguage                              String?   @map("tasiyicidil")
+  recordId                                     String?   @map("kayitid")
+  formType                                     String?   @map("formtip")
+
+  @@map("ncts_beyanname")
+}
+
+model SecNctsSummaryDeclaration {
+  id                   String  @id @map("ozetbeyanid")
+  nctsDocumentId       String  @map("beyannameid")
+  openType             Int?    @map("acmasekli")
+  summaryDeclarationNo String? @map("ozetbeyanno")
+  isInWharehouse       Int?    @map("ambardami")
+  billOfCarriageNo     String? @map("tasimasenedino")
+  wharehouseCode       String? @map("ambarkodu")
+  carriageLineItemNo   Int?    @map("tasimasatirino")
+  amountToBeOpened     Int?    @map("acilacakmiktar")
+
+  @@map("ncts_ozetbeyan")
+}
+
+model SecNctsSensitiveGoods {
+  id       String @id @map("hassasesyaid")
+  itemId   String @map("kalemid")
+  code     Int?   @map("hassasesyakodu")
+  quantity Int?   @map("hassasesyamiktar")
+
+  @@map("ncts_hassasesya")
+}
+
+model SecNctsSeal {
+  id             String  @id @map("muhurid")
+  nctsDocumentId String  @map("beyannameid")
+  sealNo         String? @map("muhurno")
+  language       String? @map("dil")
+
+  @@map("ncts_muhur")
+}
+
+model SecNctsRoute {
+  id                 String  @id @map("rotaid")
+  nctsDocumentId     String  @map("beyannameid")
+  countryOfRouteCode String? @map("ulkekod")
+
+  @@map("ncts_rota")
+}
+
+model SecNctsProducedDocument {
+  id                          String  @id @map("sunulanbelgeid")
+  itemId                      String  @map("kalemid")
+  type                        String  @map("belgetipi")
+  reference                   String  @map("belgereferansi")
+  referenceLang               String? @map("referansdil")
+  complementOfInformation     String? @map("tamamlayiciolcu")
+  complementOfInformationLang String? @map("olcudil")
+
+  @@map("ncts_sunulanbelge")
+}
+
+model SecNctsPreviousReference {
+  id                          String  @id @map("oncekibelgeid")
+  itemId                      String  @map("kalemid")
+  type                        String? @map("belgetipi")
+  reference                   String? @map("referans")
+  referenceLang               String? @map("referansdil")
+  complementOfInformation     String? @map("tamamlayicibilgi")
+  complementOfInformationLang String? @map("tamamlayicidil")
+
+  @@map("ncts_oncekibelge")
+}
+
+model SecDeclarationControlList {
+  id                       String    @id @map("beyannamekontrollistid")
+  declarationOne           String    @map("chk_beyan1")
+  declarationRegime        String    @map("chk_beyannamerejim")
+  itemExemption            String?   @map("chk_kalemmuafiyet")
+  itemAttribute            String?   @map("chk_kalemozellik")
+  itemReturnRace           String?   @map("chk_kalemmahraceiade")
+  declarationAgreementType String?   @map("beyannamesozlesmeturu")
+  itemOperationType        String?   @map("kalemislemniteligi")
+  itemEntryExitPurpose     String?   @map("kalemgiriscikisamaci")
+  insertionDate            DateTime? @map("insdate")
+  insertionUser            String    @map("insuser")
+  updatedAt                DateTime? @map("upddate")
+  updateUser               String    @map("upduser")
+  containerCount           Int?      @map("konteynersayisi")
+  itemOriginCountry        String?   @map("chk_kalemmenseiulke")
+
+  @@map("sbr_beyannamekontrollist")
+}
+
+model SecDeclarant {
+  id                  String  @id @map("beyansahibiid")
+  firmName            String  @map("firmaad")
+  address1            String? @map("adres1")
+  address2            String? @map("adres2")
+  address3            String? @map("adres3")
+  cityId              String? @map("sehirid")
+  postalCode          String? @map("postakod")
+  taxOffice           String? @map("vergidairesi")
+  tin                 String? @map("vergino")
+  name                String? @map("ad")
+  ediUser             String? @map("ediuser")
+  bilgeUser           String? @map("bilgeuser")
+  cancel              Int     @map("iptal")
+  bilgePassword       String? @map("bilgesifre")
+  certificateSerialNo String? @map("sertifikaserino")
+  agentCity           String? @map("musaviril")
+  module              String? @map("modul")
+  certificateLocation String? @map("sertifikayeri")
+  smsGSMNo            String? @map("smstelefonno")
+  mail1               String? @map("mail1")
+  mail2               String? @map("mail2")
+  mail3               String? @map("mail3")
+  mobile1             String? @map("mobil1")
+  mobile2             String? @map("mobil2")
+  serverSerialNo      String? @map("serverserino")
+  tobbPassword        String? @map("tobbsifre")
+  overChargePassword  String? @map("mesaisifre")
+
+  @@map("sgm_beyansahibi")
+}
+
+model SecCustoms {
+  id   String  @id @map("gumrukid")
+  name String? @map("ad")
+  code String? @map("edikod")
+
+  @@map("sbr_gumruk")
+}
+
+model SecCurrency {
+  id           String   @id @map("dovizdetayid")
+  date         DateTime @default(now()) @map("tarih")
+  code         String   @map("dovizkod")
+  forexBuying  Float    @map("dovizalis")
+  forexSelling Float    @map("dovizsatis")
+
+  @@map("sbr_dovizdetay")
+}
+
+model SecCountry {
+  id          String  @id @map("ulkeid")
+  name        String? @map("ad")
+  code        String? @map("edikod")
+  iso2        String? @map("kisaad")
+  englishName String? @map("ingilizcead")
+  nctsCode    String? @map("ncts_kod")
+
+  @@map("sbr_ulke")
+}
+
+model SecCompany {
+  id   String @id @map("sirketid")
+  name String @map("ad")
+  tin  String @map("vergino")
+
+  @@map("sbr_sirket")
+}
+
+model SecCity {
+  id         String  @id @map("sehirid")
+  name       String? @map("ad")
+  postalCode String? @map("postakod")
+  countryId  String? @map("ulkeid")
+
+  @@map("sbr_sehir")
+}
+
+model SecBranch {
+  id                String  @id @map("subeid")
+  companyId         String  @map("sirketid")
+  name              String? @map("ad")
+  archieveDirectory String? @map("arsivklasor")
+
+  @@map("sbr_sube")
+}
+
+model SecArchieve {
+  id           String  @id @map("arsivid")
+  name         String  @map("ad")
+  ftpName      Int     @map("ftpad")
+  moduleCode   String  @map("modulkod")
+  moduleId     String? @map("modulid")
+  isHidden     Boolean @map("musteridegorunmesin")
+  documentCode String  @map("ekbelgekodu")
+
+  @@map("sbr_arsiv")
+}
+
+model SecAdditionalDocument {
+  id          String  @id @map("ekbilgibelgeid")
+  groupCode   String  @map("grupkodu")
+  code        String? @map("ekbelgekodu")
+  explanation String? @map("aciklama")
+
+  @@map("sgm_ekbilgibelge")
+}
+
+model SecProcedure {
+  id               String @id @map("rejimid")
+  code             String @map("kod")
+  declarationType1 String @map("beyan1")
+  declarationType2 String @map("beyan2")
+
+  @@map("sgm_rejim")
+}
+
+model SecPaymentMeans {
+  id   String  @id @map("odemesekliid")
+  name String? @map("ad")
+  code String? @map("edikod")
+
+  @@map("sbr_odemesekli")
+}
+
+model SecParameter {
+  id                  String @id @map("parametreid")
+  archieveftpIp       String @map("arsivftpip")
+  archieveftpFolder   String @map("arsivftpklasor")
+  archieveftpUser     String @map("arsivftpuser")
+  archieveftpPassword String @map("arsivftppass")
+
+  @@map("sbr_parametre")
+}
+
+model SecOgiV2Log {
+  id          String   @id @map("logid")
+  uri         String   @map("uri")
+  httpMethod  String   @map("metot")
+  contentType String   @map("header")
+  requestBody String   @map("request")
+  response    String   @map("response")
+  statusCode  String   @map("statuscode")
+  insertDate  DateTime @default(now()) @map("insdt")
+  refId       String?  @map("refId")
+  jobOrderId  String?  @map("jobOrderId")
+
+  @@map("ogiV2Log")
+}
+
+model SecOgiV2IncomingData {
+  id                      String    @id @map("id")
+  declarationId           String?   @map("declarationId")
+  userName                String?   @map("userName")
+  declaration             String    @map("declaration")
+  declarationType         String    @map("declarationType")
+  insertTime              DateTime  @default(now()) @map("insertTime")
+  updateTime              DateTime? @map("updateTime")
+  declarationStatus       Int       @map("declarationStatus")
+  atr                     String?   @map("atr")
+  atrStatus               Int?      @map("atrStatus")
+  eur1                    String?   @map("eur1")
+  eur1Status              Int?      @map("eur1Status")
+  formA                   String?   @map("forma")
+  formAStatus             Int?      @map("formaStatus")
+  co                      String?   @map("co")
+  coStatus                Int?      @map("coStatus")
+  declarationUpdateStatus Int?      @map("declarationUpdateStatus")
+  jobOrderId              String?   @map("jobOrderId")
+  version                 String?   @map("version")
+
+  @@map("ogiV2_incomingData")
+}
+
+model SecOgiV2CustomerDescription {
+  id           String  @id @map("firmaid")
+  departmentId String? @map("departmanid")
+
+  @@map("ogiV2_CustomerDesc")
+}
+
+model SecOgiDocument {
+  id            String  @id @map("documentid")
+  jobOrderId    String? @map("isemriid")
+  documentType  String  @map("dokumantipi")
+  status        Int     @map("status")
+  customsStatus Int     @map("edistatus")
+  unionStatus   Int     @map("birlikstatus")
+
+  @@map("ogiV2_Document")
+}
+
+model SecLog {
+  id            String   @id @map("logid")
+  declarationId String?  @map("beyannameid")
+  form          String   @map("form")
+  date          DateTime @default(now()) @map("tarih")
+  explanation   String   @map("aciklama")
+  user          String   @map("kullanici")
+  internet      Int      @map("internet")
+  referenceInfo String   @map("referansbilgi")
+
+  @@map("sgm_log")
+}
+
+model SecFirm1 {
+  id        String  @id @map("firmaid")
+  companyId String? @map("sirketid")
+  name      String? @map("ad")
+
+  @@map("sbr_firma1")
+}
+
+model SecFirm {
+  id                             String    @id @map("firmaid")
+  companyId                      String?   @map("sirketid")
+  name                           String?   @map("ad")
+  tin                            String?   @map("vergino")
+  taxOffice                      String?   @map("vergidaire")
+  telephone1                     String?   @map("telefon1")
+  telephone2                     String?   @map("telefon2")
+  telephone3                     String?   @map("telefon3")
+  fax                            String?   @map("fax1")
+  postalCode                     String?   @map("postakod")
+  streetName                     String?   @map("adres1")
+  cityAndCitySubdivisionName     String?   @map("adres2")
+  countryId                      String?   @map("ulkeid")
+  cityId                         String?   @map("sehirid")
+  active                         Int?      @map("aktif")
+  isManufacturer                 Int?      @map("imalatci")
+  isResponsible                  Int?      @map("sorumlu")
+  financialResponsible           String?   @map("musavir")
+  financialResponsibleTaxNo      String?   @map("musavirvergino")
+  financialResponsibleTaxOffice  String?   @map("musavirvergid")
+  financialResponsibleStreetName String?   @map("musaviradres1")
+  financialResponsibleCity       String?   @map("musavirsehir")
+  eoriNo                         String?   @map("eorino")
+  city                           String?   @map("sehirad")
+  eMail                          String?   @map("email")
+  nctsConsignor                  Int?      @map("ncts_gonderici")
+  nctsConsignorSecurity          Int?      @map("ncts_gonderici_guvenlik")
+  nctsConsignee                  Int?      @map("ncts_alici")
+  nctsConsigneeSecurity          Int?      @map("ncts_alici_guvenlik")
+  nctsCarrier                    Int?      @map("ncts_tasiyici")
+  invoiceAddress                 Int?      @map("faturadresi")
+  groupCompanyId                 String?   @map("grupfirmaid")
+  unionCode                      String?   @map("birlikkod")
+  unionSecretaryCode             String?   @map("genelsekreterlikkod")
+  warrantOfAttorneyNo            String?   @map("vekaletnameno")
+  powerOfAttorneyStartDate       DateTime? @map("vekaletbastar")
+  statusDocumentNo               String?   @map("statubelgeno")
+  statusDate                     DateTime? @map("statutarih")
+  isAuthorizedObligator          Boolean?  @map("yysfirmasi")
+  isConfirmedPerson              Boolean?  @map("oksbfirmasi")
+  isCustomsCustomer              Boolean   @map("gumrukmusteri")
+  orderType                      String?   @map("siparisTur")
+  specialCode                    String?   @map("ozelkod")
+  isCarrier                      Boolean   @map("nakliyeci")
+
+  @@map("sbr_firma")
+}
+
+model SecUploadedDocument {
+  id            String   @id @map("documentarsivid")
+  declarationId String   @map("documentid")
+  fileName      String   @map("ad")
+  createdAt     DateTime @default(now()) @map("insDt")
+
+  @@map("ogiV2_DocumentArsiv")
+}
+
+model SecUnionParameter {
+  id               String  @id @map("ediid")
+  paymentPassword  String? @map("birlikcaripassword")
+  fiscalYear       Int     @map("calismayili")
+  paymentRequester String? @map("paraistemeuser")
+
+  @@map("sgm_edi")
+}
+
+model SecTransitCountry {
+  id   String  @id @map("ediidtransitulkeid")
+  code String? @map("kod")
+
+  @@map("sgm_transitulke")
+}
+
+model SecTaxType {
+  id                   String @id @map("vergiid")
+  code                 String @map("kodu")
+  name                 String @map("adi")
+  caclculationType     String @map("hesaplamatur")
+  effectCif            Int    @map("etkicif")
+  effectVat            Int    @map("etkikdvm")
+  effectOtvm           Int    @map("etkiotvm")
+  calculationOrder     Int    @map("hesaplamasira")
+  lastUpdate           Int    @map("sonupdate")
+  additionToBaseAmount Int    @map("matrahadahiletme")
+  foreignName          String @map("yabanciad")
+
+  @@map("sbr_vergituru")
+}
+
+model SecSupplementary {
+  id   String  @id @map("tamamlayiciid")
+  code String? @map("kod")
+  name String? @map("ad")
+
+  @@map("sgm_tamamlayici")
+}
+
+model SecRegulation {
+  id                          String    @id @map("mevzuatid")
+  gtip                        String?   @map("gtip")
+  lisan                       String?   @map("lisan")
+  unit                        String?   @map("birim")
+  approval                    String?   @map("onay")
+  internalProcessing          Boolean?  @map("dahildeisleme")
+  tseImport                   Boolean?  @map("tseithalat")
+  tseExport                   Boolean?  @map("tseihracat")
+  finalUse                    Boolean?  @map("nihaikullanim")
+  used                        Boolean?  @map("kullanilmis")
+  chemicalAbefta              Boolean?  @map("kimyaneabefta")
+  otherChemical               Boolean?  @map("kimyanediger")
+  controlDocument             Boolean?  @map("kontrolbelgesi")
+  warrantyDocument            Boolean?  @map("garantibelgesi")
+  civilAviation               Boolean?  @map("sivilhavacilik")
+  agriculturalShare           Boolean?  @map("tarimpayi")
+  tariffQuotaAgriculture      Boolean?  @map("tarifekontenjanitarim")
+  quotaSurveillanceControl    Boolean?  @map("kotagozetimkontrolu")
+  tariffQuotaIndustry         Boolean?  @map("tarifekontenjanisanayi")
+  list1                       Boolean?  @map("liste1")
+  list2                       Boolean?  @map("liste2")
+  list3                       Boolean?  @map("liste3")
+  list4                       Boolean?  @map("liste4")
+  list5                       Boolean?  @map("liste5")
+  customsDutyRegime           Boolean?  @map("rejimgumrukvergisieur")
+  gy                          Boolean?  @map("gy")
+  notification                Int?      @map("teblig")
+  multipleNotification        Int?      @map("tebligcoklu")
+  otv                         Boolean?  @map("otv")
+  ce                          Boolean?  @map("ce")
+  keyId                       Int       @map("keyid")
+  parentKeyId                 Int?      @map("parentkeyid")
+  lastUpdate                  Float?    @map("sonupdate")
+  additionalInfo              String?   @map("tamamlayicibilgi")
+  countries                   String?   @map("deulkeler")
+  telecommunicationPermission Boolean?  @map("telekommusade")
+  kites                       Boolean?  @map("kites")
+  weapon                      Boolean?  @map("harpsilah")
+  taek                        Boolean?  @map("taek")
+  roadCompliance              Boolean?  @map("karayoluuygunluk")
+  banknote                    Boolean?  @map("banknot")
+  safety                      Boolean?  @map("emniyet")
+  worker                      Boolean?  @map("isci")
+  ozone                       Boolean?  @map("ozon")
+  paint                       Boolean?  @map("boya")
+  fertilizer                  Boolean?  @map("gubre")
+  chemicalWeapon              Boolean?  @map("kimyasalsilah")
+  importMonitoring            Boolean?  @map("ithalatizleme")
+  epdk200524                  Boolean?  @map("epdk200524")
+  map                         Boolean?  @map("harita")
+  textileRecord               Boolean?  @map("tekstilkayit")
+  annex1                      Boolean?  @map("ek1")
+  annex2a                     Boolean?  @map("ek2a")
+  annex2b                     Boolean?  @map("ek2b")
+  annex2c                     Boolean?  @map("ek2c")
+  annex3                      Boolean?  @map("ek3")
+  annex4                      Boolean?  @map("ek4")
+  annex5a                     Boolean?  @map("ek5a")
+  annex5b                     Boolean?  @map("ek5b")
+  annex6a                     Boolean?  @map("ek6a")
+  annex6b                     Boolean?  @map("ek6b")
+  annex7                      Boolean?  @map("ek7")
+  annex8                      Boolean?  @map("ek8")
+  annex9                      Boolean?  @map("ek9")
+  annex10                     Boolean?  @map("ek10")
+  annex11                     Boolean?  @map("ek11")
+  order                       Int?      @map("Sira")
+  publicationOrder            Int?      @map("YayinSira")
+  gtipGroup                   String?   @map("GtipGrup")
+  lineCount                   Int?      @map("CizgiSayisi")
+  tax474                      String?   @map("Vergi474")
+  fullLicense                 String?   @map("LisanTum")
+  textCode                    String?   @map("TextKod")
+  regimeList                  String?   @map("RejimListe")
+  akct                        Boolean?  @map("AKCT")
+  eurotom                     Boolean?  @map("Eurotom")
+  gyuSector                   String?   @map("GyuSektor")
+  sensitive                   Int?      @map("Hassas")
+  ediMeasurementUnit          String?   @map("EdiOlcuBirim")
+  oldUnit                     String?   @map("birimeski")
+  createdTime                 DateTime? @map("instime")
+  createdBy                   String?   @map("insuser")
+  updatedTime                 DateTime? @map("updtime")
+  updatedBy                   String?   @map("upduser")
+  basicProcedure18            Boolean?  @map("basitusul18")
+  validityStartDate           DateTime? @map("gecerlilikbastarihi")
+  validityEndDate             DateTime? @map("gecerlilikbitistarihi")
+  kkdfExempt                  Boolean?  @map("kkdfMuaf")
+  ledgerStatus                String?   @map("LedgerStatus")
+
+  @@map("sbr_mevzuat")
+}
+
+model SecProjectImport {
+  id                      String    @id @map("kalemvergi")
+  projectId               String    @map("projeid")
+  rawMaterialId           String    @map("hammaddeid")
+  hsCode                  String    @map("gtip")
+  amount                  Int       @map("miktar")
+  amountKg                Int       @map("miktarkg")
+  value                   Int       @map("deger")
+  originCountryId         String?   @map("menseulkeid")
+  countryOfExitId         String?   @map("cikisulkeid")
+  declarationNo           String    @map("beyannameno")
+  declarationDate         DateTime? @default(now()) @map("beyannametarih")
+  customsId               String?   @map("gumrukid")
+  taxRate                 Int       @map("vergioran")
+  tax                     Int       @map("vergi")
+  explanation             String    @map("aciklama")
+  guaranteeNo             String    @map("teminatno")
+  guaranteeAmount         Int       @map("teminattutar")
+  guaranteeDate           DateTime? @default(now()) @map("teminattarih")
+  guaranteeBank           String    @map("teminatbanka")
+  guaranteeReleaseDate    DateTime? @default(now()) @map("teminatcozulmetarih")
+  guaranteeReturnDate     DateTime? @default(now()) @map("teminatiadetarih")
+  guaranteeInterestRate   Int       @map("teminatfaizoran")
+  guaranteeInterestAmount Int       @map("teminatfaiztutar")
+
+  @@map("sdi_projeithalat")
+}
+
+model SecMedosInvoice {
+  id            String   @id @map("ihrevrakfaturaid")
+  medosId       String   @map("beyannameihrevraktobbid")
+  invoiceNo     String?  @map("faturano")
+  invoiceDate   DateTime @default(now()) @map("faturatarih")
+  invoiceAmount Float    @map("faturatutar")
+  currencyType  String?  @map("dovizcinsi")
+
+  @@map("sgm_beyannameihrevraktobbfatura")
+}
+
+model SecMedosInvoiceAuthorized {
+  id            String   @id @map("ihrevrakfaturaid")
+  medosId       String   @map("beyannameihrevrakid")
+  invoiceNo     String?  @map("faturano")
+  invoiceDate   DateTime @default(now()) @map("faturatarih")
+  invoiceAmount Float    @map("faturatutar")
+  currencyType  String?  @map("dovizcinsi")
+
+  @@map("sgm_beyannameihrevrakfatura")
+}
+
+model SecMedosGoods {
+  id         String  @id @map("ihrevraktobbmallarid")
+  medosId    String  @map("beyannameihrevraktobbid")
+  definition String? @map("esyatanimi")
+  weight     Float   @map("agirlik")
+  unit       String? @map("birim")
+
+  @@map("sgm_beyannameihrevraktobbmallar")
+}
+
+model SecMedosDocument {
+  id           String @id @map("ihrevraktobbbelgeid")
+  medosId      String @map("beyannameihrevraktobbid")
+  archieveId   String @map("arsivid")
+  documentType Int    @map("evraktur")
+
+  @@map("sgm_beyannameihrevraktobbbelge")
+}
+
+model SecMedosDeclarationType {
+  id   String @id @map("beyantipid")
+  name String @map("ad")
+
+  @@map("medos_beyantip")
+}
+
+model SecMedosCustoms {
+  id   Int     @id @map("GumrukId")
+  name String? @map("Adi")
+  code String? @map("Kodu")
+
+  @@map("medos_gumruk")
+}
+
+model SecMedosCurrencyType {
+  id   Int     @id @map("DovizTurId")
+  name String? @map("Adi")
+  code String? @map("Kodu")
+
+  @@map("medos_doviztur")
+}
+
+model SecMedosCountry {
+  id   Int     @id @map("UlkeId")
+  name String? @map("Adi")
+  code String? @map("Kodu")
+
+  @@map("medos_ulke")
+}
+
+model SecMedosAuthorized {
+  id                       String    @id @map("beyannameihrevrakid")
+  declarationId            String    @map("beyannameid")
+  consignorNameTitle       String?   @map("gonderici")
+  consigneeNameTitle       String?   @map("alici")
+  countryOfExitName        String?   @map("menseulke")
+  countryOfDestinationName String?   @map("varisulkesi")
+  transportMeans           String?   @map("tasimabilgisi")
+  grossWeight              String?   @map("brutagirlik")
+  goods                    String?   @map("esyatanimi")
+  certificateDate          DateTime? @map("tarih")
+  itemLocation             String?   @map("yerbilgisi")
+
+  @@map("sgm_beyannameihrevrak")
+}
+
+model SecMedosOriginCountry {
+  id              String @id @map("beyannameihrevraktobbmenseulkeid")
+  medosDocumentId String @map("beyannameihrevraktobbid")
+  countryId       Int    @map("ulkeid")
+  orderNo         Int    @map("sirano")
+
+  @@map("sgm_beyannameihrevraktobbmenseulke")
+}
+
+model SecMedos {
+  id                       String    @id @map("beyannameihrevraktobbid")
+  declarationId            String    @map("beyannameid")
+  documentType             String?   @map("belgetur")
+  documentNumber           String?   @map("belgeno")
+  declarationTypeId        String?   @map("beyantipid")
+  consignorNameTitle       String?   @map("gonderici")
+  consignorAddress         String?   @map("gondericiadres")
+  consignorPlace           String?   @map("IhracatciYer")
+  consignorCountryCode     String?   @map("IhracatciUlkeKodu")
+  consigneeNameTitle       String?   @map("alici")
+  consigneeAddress         String?   @map("aliciadres")
+  countriesOfOriginId      Int?      @map("MenseUlkeId")
+  consigneeCountryCode     String?   @map("MalinGonSahisUlkeKod")
+  transportMeans           String?   @map("tasimabilgisi")
+  covenantSelection        String?   @map("atrtaahhut")
+  remarks                  String?   @map("gozlemler")
+  capacityReportDate       DateTime? @map("KapasiteRaporuTarihi")
+  capacityReportVisaNo     Int?      @map("KapasiteRaporuVizeNo")
+  declarantId              String?   @map("beyansahibiid")
+  gtsOption                Int?      @map("GtsSecim")
+  countryOfDestinationCode String?   @map("VarisUlkeKod")
+  approval                 Int?      @map("Onay")
+  approvalDate             DateTime? @map("OnayZamani")
+  visa                     Int?      @map("Vize")
+  visaDate                 DateTime? @map("VizeZamani")
+  status                   Int?      @map("Durum")
+  statusExplanation        String?   @map("DurumAciklama")
+  gtbReferenceNo           String?   @map("GtbReferansNo")
+  gtbId                    String?   @map("GtbGuid")
+  creationDate             DateTime  @default(now()) @map("tarih")
+
+  @@map("sgm_beyannameihrevraktobb")
+}
+
+model SecMedosUnit {
+  id   Int     @id @map("BirimId")
+  name String? @map("Adi")
+  code String? @map("Kodu")
+
+  @@map("medos_birim")
+}
+
+model SecValue {
+  id                   String  @id @map("beyannamekiymetbildirimid")
+  declarationId        String  @map("beyannameid")
+  buyerSeller          String  @map("alicisatici")
+  buyerSellerDetails   String? @map("alicisaticiayrintilar")
+  deed                 String  @map("edim")
+  imputed              String? @map("emsal")
+  invoiceDateNo        String? @map("faturatarihisayisi")
+  customsOfficeNo      String? @map("gumrukidaresikarari")
+  constraints          String  @map("kisitlamalar")
+  constraintDetails    String? @map("kisitlamalarayrintilar")
+  relation             String? @map("munasebet")
+  royalty              String  @map("royalti")
+  royaltyConditions    String? @map("royaltikosullari")
+  sellerPass           String  @map("saticiyaintikal")
+  sellerPassConditions String? @map("saticiyaintikalkosullari")
+  cityLocation         String  @map("sehiryer")
+  contractDateNo       String? @map("sozlesmetarihisayisi")
+  recognisance         String  @map("taahutname")
+  deliveryTerms        String  @map("teslimsekli")
+
+  @@map("sgm_beyannamekiymetbildirim")
+}
+
+model SecSummaryDeclaration {
+  id                   String  @id @map("beyannameozetbeyanid")
+  declarationId        String  @map("beyannameid")
+  summaryDeclarationNo String? @map("ozetbeyanno")
+  innerWarehouse       Int     @map("ambaricinde")
+  otherRegime          Int     @map("baskarejim")
+
+  @@map("sgm_beyannameozetbeyan")
+}
+
+model SecOvercharge {
+  id            String @id @map("beyannamemesaiid")
+  declarationId String @map("beyannameid")
+  overchargeId  String @map("FazlaMesaiId")
+
+  @@map("sgm_beyannamemesai")
+}
+
+model SecItem {
+  id                              String  @id @map("kalemid")
+  declarationId                   String  @map("beyannameid")
+  HSCode                          String  @map("gtip")
+  producer                        Int     @map("imalatci")
+  producerId                      String? @map("imalatcifirmaid")
+  procedure                       String? @map("rejim")
+  originCountry                   String  @map("menseulke")
+  statisticalQuantityUnit         String  @map("olcubirimi")
+  internationalTreaty             String? @map("uluslararasianlasma")
+  detectionUnit1                  String? @map("algilamabirimi1")
+  detectionAmount1                Int?    @map("algilamamiktari1")
+  detectionUnit2                  String? @map("algilamabirimi2")
+  detectionAmount2                Int?    @map("algilamamiktari2")
+  detectionUnit3                  String? @map("algilamabirimi3")
+  detectionAmount3                Int?    @map("algilamamiktari3")
+  exemptions1                     String? @map("muafiyet1")
+  exemptions2                     String? @map("muafiyet2")
+  exemptions3                     String? @map("muafiyet3")
+  exemptions4                     String? @map("muafiyet4")
+  exemptions5                     String? @map("muafiyet5")
+  deliveryTerms                   String  @map("teslimsekli")
+  specification                   String? @map("ozellik")
+  invoiceAmount                   Float   @map("faturatutari")
+  freightAmount                   Float?  @map("navluntutari")
+  insuranceAmount                 Float?  @map("sigortatutari")
+  itemDescription                 String? @map("ticaritanim")
+  brandName                       String? @map("kapkonteynermarka")
+  itemNo                          String? @map("kapkonteynerno")
+  packagingType                   String? @map("kapcinsi")
+  packageQuantity                 Int?    @map("kapadet")
+  itemUnitOfMeasure               String? @map("birimi")
+  returnToOrigin                  String? @map("mahreceiade")
+  secondaryProcess                String? @map("ikincilurun")
+  usedGoods                       String? @map("kullanilmisesya")
+  domesticOtherExplanation        String? @map("yurticidigeraciklama")
+  exemptionExplanation            String? @map("muafiyetaciklamasi")
+  foreignComissionCurrency        String? @map("yurtdisikomisyondovizi")
+  foreignDemurrageCurrency        String? @map("yurtdisidemurajdovizi")
+  foreignRoyaltyCurrency          String? @map("yurtdisiroyaltidovizi")
+  foreignInterestCurrency         String? @map("yurtdisifaizdovizi")
+  foreignOtherCurrency            String? @map("yurtdisidigerdovizi")
+  foreignOtherExplanation         String? @map("yurtdisidigeraciklama")
+  itemProcessType                 String? @map("kalemislemniteligi")
+  reasonForEntryOrExit            String? @map("giriscikisamaci")
+  reasonForEntryOrExitExplanation String? @map("giriscikisamaciaciklama")
+  itemLineNo                      Int     @map("edisirano")
+  grossWeight                     Float   @map("burutagirlik")
+  netWeight                       Float   @map("netagirlik")
+  statisticalQuantity             Float?  @map("olcumiktari")
+  itemNumber                      Int     @default(0) @map("sirano")
+  borderPassFee                   Float?  @map("sinirgecisucreti")
+  statisticalValue                Float?  @map("istatistikikiymet")
+  itemQuantity                    Float?  @map("miktari")
+  domesticOther                   Int?    @map("diger")
+  domesticBank                    Int?    @map("bankatutar")
+  domesticStorage                 Int?    @map("depolama")
+  domesticDischarge               Int?    @map("tahliye")
+  domesticPort                    Int?    @map("liman")
+  domesticCulture                 Int?    @map("kultur")
+  domesticRUSF                    Int?    @map("kkdf")
+  domesticEnvironment             Int?    @map("cevre")
+  itemAbroadExpenses              Float?  @map("yurtdisitutari")
+  internalExpensesAmount          Float?  @map("yurticitutari")
+  foreignCommission               Float?  @map("yurtdisikomisyon")
+  foreignDemurrage                Float?  @map("yurtdisidemuraj")
+  foreignRoyalty                  Float?  @map("yurtdisiroyalti")
+  foreignInterest                 Float?  @map("yurtdisifaiz")
+  foreignOther                    Float?  @map("yurtdisidiger")
+  additionalCode                  String? @map("ekkod")
+  unionExtension                  String? @map("birlikacilim")
+  containerTypeCode               String? @map("ambalajturu")
+  productionYear                  String? @map("uretimyili")
+  threadType                      String? @map("iplikcinsi")
+  goodsDescription                String? @map("esyatanimi")
+  additionalInformation           String? @map("aciklama")
+  quotaCode                       String? @map("kota")
+  ecological                      String? @map("ekolojikurun")
+  cifValue                        Float?  @map("cifkiymeti")
+  vatAssement                     Float?  @map("kdvmatrahi")
+  fobAmount                       Float?  @map("fobtutar")
+  declarationType                 String? @map("beyan")
+  orderType                       String? @map("siparisTur")
+  invoiceNo                       String? @map("faturano")
+  invoiceDate                     String? @map("faturatarih")
+
+  @@map("sgm_kalem")
+}
+
+model SecItemTrademark {
+  id                      String  @id @map("kalemmarkaid")
+  itemId                  String  @map("kalemid")
+  IMEINo                  String? @map("imeino")
+  tradeMarkName           String? @map("markaadi")
+  tradeMarkRegistrationNo String? @map("markatescilno")
+  tradeMarkType           String? @map("markaturu")
+  modelYear               String? @map("modelyili")
+  model                   String? @map("model")
+  engineVolume            String? @map("motorhacmi")
+  engineNo                String? @map("motorno")
+  engineType              String? @map("motortipi")
+  color                   String? @map("renk")
+  referenceNo             String? @map("referansno")
+  engineCylinderQuantity  Int?    @map("silindiradedi")
+  gear                    String? @map("vites")
+  tradeMarkValue          Float?  @map("markakiymeti")
+  horsePower              Float?  @map("motorgucu")
+
+  @@map("sgm_kalemmarka")
+}
+
+model SecItemTCGBOpenClose {
+  id                  String  @id @map("kalemacmakapamaid")
+  itemId              String  @map("kalemid")
+  closedDeclarationNo String? @map("beyannameno")
+  closedItemLineNo    Int?    @map("kalemsirano")
+  closedItemQuantity  Int?    @map("miktar")
+
+  @@map("sgm_kalemacmakapama")
+}
+
+model SecItemSupplementary {
+  id                    String  @id @map("kalemtamamlayiciid")
+  itemId                String  @map("kalemid")
+  supplementaryId       String? @map("tamamlayiciid")
+  supplementaryDetailId String? @map("tamamlayicidetayid")
+  value                 String? @map("degeri")
+
+  @@map("sgm_kalemtamamlayici")
+}
+
+model SecItemReturn {
+  id          String  @id @map("esyagerigelmesebebiid")
+  itemId      String  @map("kalemid")
+  kod         Int     @map("esyagerigelmesebebikod")
+  explanation String? @map("aciklama")
+
+  @@map("sgm_kalemesyagerigelmesebebi")
+}
+
+model SecItemDuty {
+  id            String  @id @map("kalemvergi") @db.UniqueIdentifier
+  itemId        String  @map("kalemid") @db.UniqueIdentifier
+  code          String? @map("kodu")
+  dutyAmount    Float?  @map("tutari")
+  dutyRate      String? @map("orani")
+  paymentMethod String? @map("odemesekli")
+  dutyAssesment Float?  @map("matrah")
+
+  @@map("sgm_kalemvergi")
+}
+
+model SecItemDocument {
+  id         String @id @map("kalemdiibid") @db.UniqueIdentifier
+  itemId     String @map("kalemid") @db.UniqueIdentifier
+  lineNumber String @map("diibbelgeno")
+
+  @@map("sgm_kalemdiib")
+}
+
+model SecItemDetail {
+  id                    String    @id @default(dbgenerated()) @map("kalemdetayid") @db.UniqueIdentifier
+  itemId                String    @map("kalemid")
+  declarationId         String    @map("beyannameid") @db.UniqueIdentifier
+  itemDefinitionId      String    @map("esyatanimid")
+  gc                    String    @map("gc")
+  package               Int?      @map("kap")
+  itemQuantity          Int?      @map("miktar")
+  grossWeight           Float?    @map("brutkg")
+  netWeight             Float?    @map("netkg")
+  amount                Float?    @map("tutar")
+  currencyType          String?   @map("dovizcinsi")
+  description           String?   @map("aciklama")
+  invoiceNo             String?   @map("faturano")
+  invoiceDate           DateTime? @map("faturatarih")
+  bolen                 String?   @map("bolen")
+  customerNo1           String?   @map("musrefno1")
+  customerNo2           String?   @map("musrefno2")
+  amount2               Float     @map("tutar2")
+  warehouseCode         String?   @map("antrepobeyannameno")
+  wareHouseItemNo       String?   @map("antrepokalemsirano")
+  worawId               String?   @map("worawid")
+  masterId              String?   @map("masterid")
+  deliverNo             String?   @map("deliveryno")
+  originCountry         String?   @map("menseulke")
+  investmentDocumentNo  String?   @map("yatirimtesvikbelgeno")
+  investmentSupportDate String?   @map("yatirimtesviktarihi")
+  countryOfExit         String?   @map("cikisulkeliman")
+  senderRef             String?   @map("gondericireferans")
+  billOfLandingNo       String?   @map("konsimantono")
+  containerNo           String?   @map("konteynernumara")
+  shipName              String?   @map("gemiadi")
+  carrierNo             String?   @map("tasiyicikodu")
+  portOfDischarge       String?   @map("bosaltmalimani")
+  additionalValue       String?   @map("ilaveedilecekkiymet")
+  integrationNo         String?   @map("entegrasyonno")
+
+  @@map("sgm_kalemdetay")
+}
+
+model SecItemDefinition {
+  id           String   @id @default(dbgenerated()) @map("malzemetanimid")
+  firmId       String   @map("firmaid")
+  code         String   @map("kod")
+  gtip         String   @map("gtip")
+  turkishName  String   @map("turkcead")
+  originalName String   @map("orjinaladi")
+  unit         String   @map("birimi")
+  warningNote  String   @map("uyarinotu")
+  royaltyRate  Float    @map("royaltioran")
+  saleAmount   Float    @map("satistutar")
+  note         String   @map("not")
+  netWeight    Float    @map("netagirlik")
+  grossWeight  Float    @map("burutagirlik")
+  createdBy    String   @map("kaydeden")
+  createdDate  DateTime @map("kayittarihi")
+  gtipupduser  String   @map("gtipupduser")
+  gtipupddate  DateTime @map("gtipupddate")
+  tareks       Boolean  @map("tareks")
+  note2        String   @map("not2")
+  senderHsCode String   @map("gondericihscode")
+  ledgerStatus String   @map("LedgerStatus")
+  birim        String   @map("birim")
+
+  @@map("sgm_malzemetanim")
+}
+
+model SecItemContainer {
+  id          String @id @map("kalemkonteynerid") @db.UniqueIdentifier
+  itemId      String @map("kalemid") @db.UniqueIdentifier
+  containerNo String @map("kapkonteynerno")
+  countryCode String @map("konteynerulke")
+
+  @@map("sgm_kalemkonteyner")
+}
+
+model SecItemAdditionalDocument {
+  id           String    @id @map("kalemekbelgeid") @db.UniqueIdentifier
+  itemId       String    @map("kalemid") @db.UniqueIdentifier
+  groupCode    String    @map("grupkodu")
+  code         String?   @map("ekbelgekodu")
+  documentDate DateTime? @default(now()) @map("belgetamamlamatarihi")
+  reference    String?   @map("referans")
+  verification String?   @map("dogrulama")
+  visaDate     DateTime? @map("vizetarihi")
+
+  @@map("sgm_kalemekbelge")
+}
+
+model SecExpense {
+  id                   String    @id @map("masrafid") @db.UniqueIdentifier
+  declarationId        String    @map("beyannameid") @db.UniqueIdentifier
+  expenseTypeId        String    @map("masrafturid") @db.UniqueIdentifier
+  expenseDate          DateTime? @default(now()) @map("masraftarih")
+  currencyType         String    @map("doviztur")
+  currency             Float?    @map("dovizkur")
+  amount               Float     @map("tutar")
+  amountTry            Float     @map("tutartl")
+  registeredAmount     Float     @map("muhasebetutar")
+  registeredAmountTry  Float     @map("muhasebetutartl")
+  documentNo           String?   @map("belgeno")
+  automaticExpense     Boolean   @map("otomatikmasraf")
+  receiptId            String?   @map("dekontid")
+  explanation          String?   @map("aciklama")
+  expenseOwner         String?   @map("masrafsahibi")
+  expenseRegisterer    String?   @map("masrafigiren")
+  konId                String?   @map("konid")
+  mailSent             Int       @map("mailgitti")
+  paymentType          Int       @map("odemesekli")
+  yDate                DateTime? @default(now()) @map("y_tarih")
+  specialSlip          Int?      @map("ozelfis")
+  ledgerIntegration    Int?      @map("muhasebeentegreyok")
+  checkNo              String?   @map("cekno")
+  verificationDate     DateTime? @default(now()) @map("onaytarih")
+  transfer             Int?      @map("devir")
+  otherAmount          Float?    @map("tutardiger")
+  vatAmountTry         Float?    @map("kdvtutartl")
+  currencyIndex        Int?      @map("dovizkurindex")
+  firmCode             String?   @map("carifirmakod")
+  firmName             String?   @map("carifirmaad")
+  vatRate              Float?    @map("kdvoran")
+  eInvoiceJob          Int?      @map("efaturaliislem")
+  expenseMasterId      String    @map("masrafmasterid") @db.UniqueIdentifier
+  eInvoiceNo           String?   @map("efaturano")
+  eInvoiceDate         DateTime? @default(now()) @map("efaturatarih")
+  expenseCurrentId     String    @map("masrafcariid") @db.UniqueIdentifier
+  fineSource           Int?      @map("cezakaynak")
+  oldDocumentNo        String?   @map("belgenoeski")
+  documentNoChangeDate DateTime? @default(now()) @map("belgenodegtar")
+  expenseReceiver      String?   @map("masrafalicisi")
+
+  @@map("sgm_masraf")
+}
+
+model SecExpenseView {
+  id                   String    @id @map("masrafid") @db.UniqueIdentifier
+  declarationId        String    @map("beyannameid") @db.UniqueIdentifier
+  expenseTypeId        String    @map("masrafturid") @db.UniqueIdentifier
+  expenseDate          DateTime? @default(now()) @map("masraftarih")
+  documentNo           String?   @map("belgeno")
+  currencyType         String?   @map("doviztur")
+  typeOfExpense        String?   @map("adi")
+  exchangeRate         Float?    @map("dovizkur")
+  amount               Float?    @map("tutar")
+  amountInTL           Float?    @map("tutartl")
+  vatAmountInTL        Float?    @map("kdvtutartl")
+  declarationReference String?   @map("referansno")
+  customerName         String?   @map("musteriad")
+  consignorName        String?   @map("gondericiad")
+  consigneeName        String?   @map("aliciad")
+  sentCustomsName      String?   @map("gonderilengumrukad")
+  registrationNo       String?   @map("tescilno")
+  registrationDate     DateTime? @map("tesciltarihi")
+  receiptNo            String?   @map("dekontno")
+  cifValue             Float?    @map("cifkiymeti")
+  customerReferenceNo  String?   @map("musterireferansno")
+  customerReferenceNo2 String?   @map("musterireferansno2")
+  approvalDate         DateTime? @map("onaytarih")
+  expenseEntryDate     DateTime? @map("masrafgiristarihi")
+  totalPackages        Int?      @map("toplamkap")
+  grossWeight          Float?    @map("brutagirlik")
+  invoiceAmount        Float?    @map("faturatutari")
+  invoiceAmountInTL    Float?    @map("faturatutaritl")
+  invoiceCurrencyType  String?   @map("faturadovizturu")
+  itemLocation         String?   @map("esyaninbulunduguyer")
+
+  @@map("sgm_masraflistesi_view")
+}
+
+model SecDeclaration {
+  id                              String    @id @map("beyannameid")
+  departmentId                    String    @map("departmanid")
+  customerId                      String    @map("musteriid")
+  personelResponsibleId           String?   @map("sorumluid")
+  procedure                       String?   @map("rejim")
+  declarationNo                   String    @map("tescilno")
+  customsRegistrationDate         DateTime? @map("tesciltarihi")
+  unionRegistrationDate           DateTime? @map("birliktesciltarihi")
+  temporaryDeclarationNo          String?   @map("gecicitescilno")
+  customs                         String?   @map("gonderilengumruk")
+  simplifiedProcedure             String?   @map("basitusul")
+  loadingList                     Int       @map("belgesayisi")
+  totalPackageQuantity            Int       @map("toplamkap")
+  grossWeight                     Float     @map("brutagirlik")
+  tradeCountry                    String    @map("ticyapilanulke")
+  secRefNo                        Int       @map("referansno")
+  associationRegistrationNo       String?   @map("birlikkayitno")
+  associationCryptoNo             String?   @map("kriptokodu")
+  reservedReferenceNumber         String?   @map("paymentrefnumber")
+  unionTotalPayment               Float?    @map("birliktutari")
+  countryOfExit                   String?   @map("cikisulke")
+  countryOfDestination            String?   @map("gidecegiulke")
+  countryOfFirstDestination       String?   @map("sevkulke")
+  exitVehicleType                 String?   @map("cikisaractipi")
+  exitVehicleIdentity             String?   @map("cikisaracno")
+  exitVehicleCountry              String?   @map("cikisaraculke")
+  deliveryTerms                   String    @map("teslimsekli")
+  deliveryPlace                   String    @map("teslimyeri")
+  container                       Int       @map("konteyner")
+  borderVehicleType               String?   @map("siniraractipi")
+  borderVehicleIdentity           String?   @map("siniraracno")
+  borderVehicleCountry            String?   @map("siniraraculke")
+  totalPayableAmount              Float     @map("faturatutari")
+  fobAmount                       Float     @map("fobtutar")
+  totalPayableAmountCurrency      String    @map("faturadovizturu")
+  totalFreightAmount              Float?    @map("navluntutari")
+  totalFreightAmountCurrency      String?   @map("navlundovizturu")
+  borderTransportMeans            String    @map("tasimasekli")
+  partyRelationshipCode           String?   @map("alicisaticiiliskisi")
+  totalInsurance                  Float?    @map("sigortatutari")
+  totalInsuranceCurrency          String?   @map("sigortadovizturu")
+  transportHandlingPlace          String?   @map("yukbosyer")
+  totalForeignExpenditure         Float?    @map("yurtdisitutari")
+  totalDomesticExpenditure        Float?    @map("yurticitutari")
+  totalForeignExpenditureCurrency String?   @map("yurtdisidovizturu")
+  bankCode                        String?   @map("banka")
+  itemLocation                    String?   @map("esyaninbulunduguyer")
+  destinationCustomsOffice        String?   @map("varisgumruk")
+  warehouseCode                   String?   @map("antrepo")
+  plannedRoute                    String?   @map("guzergah")
+  exitCustomsOffice               String?   @map("giriscikisgumruk")
+  transactionNature               String?   @map("sozlesmeturu")
+  remarks                         String?   @map("aciklama")
+  userCode                        String?   @map("kullanicikod")
+  referenceDate                   DateTime? @map("referanstarihi")
+  payment                         String?   @map("odemesekli")
+  paymentMeans                    String?   @map("odemearaci")
+  consignorId                     String?   @map("gondericiid")
+  consigneeId                     String?   @map("aliciid")
+  portCode                        String?   @map("limankodu")
+  compensatoryDuty                Float?    @map("tev")
+  currencyDate                    DateTime  @default(now()) @map("kurtarihi")
+  declarantId                     String?   @map("beyansahibiid")
+  unionSecretaryCode              String?   @map("genelsekreterlikkod")
+  unionCode                       String?   @map("birlikkod")
+  paymentType                     String?   @map("bankaodemesekli")
+  declarationType1                String?   @map("beyan1")
+  declarationType2                String?   @map("beyan2")
+  declarationType3                String?   @map("beyan3")
+  loadUnloadCustomsCode           String?   @map("yukbosgumruk")
+  transporterFirmid               String?   @map("tasiyicifirmaid")
+  customsStatus                   Int       @map("edistatus")
+  customsRequestNumber            Int       @map("edigondermesayisi")
+  customsFlat                     String?   @map("ediflat")
+  unionStatus                     Int       @map("birlikstatus")
+  unionFlat                       String?   @map("birlikflat")
+  unionPaymentType                String?   @map("birlikodemetip")
+  agencyDispatchNo                String?   @map("acentasevkbildirimno")
+  guranteeType                    String?   @map("teminatsekli")
+  guranteeExplanation             String?   @map("teminataciklama")
+  letterOfGuaranteeAmount         Float?    @map("teminatbankatutari")
+  guaranteeOtherAmount            Float?    @map("teminatdigertutari")
+  guranteeOtherAmountReference    String?   @map("teminatdigerreferans")
+  globalGuaranteeNo               String?   @map("teminatglobalreferans")
+  cashGuaranteeAmount             Float?    @map("teminatnakittutari")
+  guaranteeRate                   Float?    @map("teminatorani")
+  environment                     Float?    @map("cevre")
+  port                            Float?    @map("liman")
+  storage                         Float?    @map("depolama")
+  other                           Float?    @map("diger")
+  kkdf                            Float?    @map("kkdf")
+  discharge                       Float?    @map("tahliye")
+  bankAmount                      Float?    @map("bankatutar")
+  culture                         Float?    @map("kultur")
+  banderoleFee                    Float?    @map("bandrolucreti")
+  lineResult                      String?   @map("hatsonuc")
+  lineStatus                      String?   @map("hatdurumu")
+  lineStatusTime                  DateTime? @map("hattarihi")
+  declarationCompletionTime       DateTime? @map("kapanistarihi")
+  verificationCode                String?   @map("onaykod")
+  cifValue                        Float?    @map("cifkiymeti")
+  inspectionAgent                 String?   @map("muayenememuru")
+  vatAssesment                    Float?    @map("kdvmatrahi")
+  refId                           String?   @map("edirefid")
+  temporaryRefId                  String?   @map("edigecicirefid")
+  manuelAssesment                 Boolean   @map("manueltahakkuk")
+  calculated                      Boolean   @map("hesaplandi")
+  invoiceFirmId                   String?   @map("faturafirmaid")
+  containerNumber                 Int?      @map("konteynersayisi")
+  carrier                         String?   @map("nakliyeci")
+  customerRefNo                   String?   @map("musterireferansno")
+  customerRefNo2                  String?   @map("musterireferansno2")
+  customerRefNo3                  String?   @map("musterireferansno3")
+  jobOrderCreationDate            DateTime?  @map("isemritarihi")
+  jobOrderEndDate                 DateTime?  @map("isbitistarihi")
+  cancelReason                    String?   @map("iptalnedeni")
+  createdAt                       DateTime? @map("y_tarih")
+
+  @@map("sgm_beyanname")
+}
+
+model SecDeclarationFollow {
+  id            String   @id @map("istakipid")
+  declarationId String   @map("beyannameid")
+  remarks       String   @map("aciklama")
+  isCanceled    Boolean  @map("declarantiptal")
+  cancelReason  String?  @map("declarantiptalnedeni")
+  createdAt     DateTime @default(now()) @map("tarih")
+
+  @@map("sgm_istakip")
+}
+
+model SecDeclarationAdditionalInfo {
+  id                String  @id @map("beyannameekbilgilerid")
+  declarationId     String  @map("beyannameid")
+  declarationStatus String? @map("dosyasondurum")
+
+  @@map("sgm_beyannameekbilgiler")
+}
+
+model SecCustomsMailLog {
+  id               String    @id @map("gumrukbilgilogid")
+  registrationNo   String    @map("tescilno")
+  status           String    @map("statu")
+  registrationDate DateTime  @default(now()) @map("tesciltarihi")
+  registrationTime DateTime  @default(now()) @map("tescilzamani")
+  procedure        String    @map("rejim")
+  customsCode      String    @map("gumrukkod")
+  customsName      String    @map("gumrukad")
+  declarationOwner String    @map("beyansahibi")
+  taxAmount        Float     @map("vergitutar")
+  statusInfo       String    @map("statubilgi")
+  statusOn         String    @map("statuson")
+  statusDate       DateTime? @default(now()) @map("statutarih")
+  statusTime       DateTime? @default(now()) @map("statusaat")
+  declarationId    String    @map("beyannameid")
+  messageFrom      String?   @map("MessageFrom")
+  messageDisplayTo String?   @map("MessageDisplayTo")
+  messageDisplayCc String?   @map("MessageDisplayCc")
+  inspectorAgent   String?   @map("muayenememuru")
+  mailBody         Bytes?    @map("mailbody")
+
+  @@map("sgm_gumrukbilgi_log")
+}
+
+model SecCustomsLog {
+  id              Int      @id @default(autoincrement()) @map("id")
+  declarationId   String   @map("beyannameid")
+  version         Int      @map("versiyon")
+  status          Int      @map("status")
+  requestXML      String   @map("gidenxml")
+  requestDate     DateTime @default(now()) @map("gidentarih")
+  responseXML     String   @map("responsexml")
+  resultXML       String   @map("gelenxml")
+  resultDate      DateTime @default(now()) @map("gelentarih")
+  refId           String   @map("refid")
+  signedXML       String   @map("imzalananxml")
+  customsUserCode String   @map("bilgekodu")
+  type            String   @map("tip")
+
+  @@map("sgm_gumrukimza")
 }

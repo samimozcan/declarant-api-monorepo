@@ -13,6 +13,7 @@ RUN npm install
 # Generate Prisma client
 RUN npx prisma generate
 RUN npx prisma generate --schema=./prisma/master/schema.prisma
+RUN npx prisma generate --schema=./prisma/sec-bridge/schema.prisma
 
 # Copy the rest of the application code
 COPY . .

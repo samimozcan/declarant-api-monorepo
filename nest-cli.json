@@ -54,6 +54,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/master-prisma/tsconfig.lib.json"
       }
+    },
+    "sec-prisma": {
+      "type": "library",
+      "root": "libs/sec-prisma",
+      "entryFile": "index",
+      "sourceRoot": "libs/sec-prisma/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/sec-prisma/tsconfig.lib.json"
+      }
     }
   }
 }
