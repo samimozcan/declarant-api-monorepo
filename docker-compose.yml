@@ -28,7 +28,7 @@ services:
       - DATABASE_URL_MASTER=${DATABASE_URL_MASTER}
 
 
-  master-service:
+  sec-service:
     image: sec-service:latest
     build:
       context: .

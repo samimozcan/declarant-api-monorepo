@@ -5,8 +5,8 @@ import { Injectable } from '@nestjs/common';
 export class SecBridgeService {
   constructor(private readonly secDB: SecPrismaService) {}
   async getHello(): Promise<string> {
-    // const declaration = await this.secDB.secDeclaration.findFirst();
-    // console.log(declaration);
+    const declaration = await this.secDB.secDeclaration.findFirst();
+    console.log(declaration);
     return 'Hello World!';
   }
 }

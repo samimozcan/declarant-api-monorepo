@@ -8,7 +8,7 @@ async function bootstrap() {
     {
       transport: Transport.TCP,
       options: {
-        host: process.env.ENV !== undefined ? 'master-service' : 'localhost',
+        host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
         port: 3001,
       },
     },

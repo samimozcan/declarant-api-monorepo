@@ -10,7 +10,8 @@ import { SecService } from './sec.service';
         name: 'SEC_SERVICE',
         transport: Transport.TCP,
         options: {
-          host: process.env.ENV !== undefined ? 'sec-service' : 'localhost',
+          host:
+            process.env.NODE_ENV === 'production' ? 'sec-service' : 'localhost',
           port: 3002,
         },
       },
