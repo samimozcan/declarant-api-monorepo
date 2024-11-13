@@ -504,7 +504,7 @@ model SecOgiDocument {
   status        Int     @map("status")
   customsStatus Int     @map("edistatus")
   unionStatus   Int     @map("birlikstatus")
-  declarant     Int     @map("Declarant")
+  declarant     Int?    @map("Declarant")
 
   @@map("ogiV2_Document")
 }
