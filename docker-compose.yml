@@ -15,7 +15,6 @@ services:
       - sec-service
 
   master-service:
-    image: master-service:latest
     build:
       context: .
       dockerfile: Dockerfile.master
@@ -29,7 +28,6 @@ services:
 
 
   sec-service:
-    image: sec-service:latest
     build:
       context: .
       dockerfile: Dockerfile.sec
