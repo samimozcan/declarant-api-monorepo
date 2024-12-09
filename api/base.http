@@ -9,3 +9,6 @@ GET http://localhost:3000/master
 
 ###
 GET http://localhost:3000/sec/getHello
+
+###
+GET http://localhost:3000/direct-export-job-order

@@ -8,7 +8,7 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 # Generate Prisma client
-RUN npx prisma generate
+RUN npm run prisma:generate:ogi
 # Build the application
 RUN npm run build
 
