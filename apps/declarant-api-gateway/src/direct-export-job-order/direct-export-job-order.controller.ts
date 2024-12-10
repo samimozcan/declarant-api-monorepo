@@ -9,8 +9,7 @@ export class DirectExportJobOrderController {
 
   @Get()
   async getDirectExportJobOrder() {
-    await this.directExportJobOrderService.createDirectExportJobOrder();
-    return 'Hello World!';
+    return this.directExportJobOrderService.createDirectExportJobOrder();
   }
 
   @Post('create')

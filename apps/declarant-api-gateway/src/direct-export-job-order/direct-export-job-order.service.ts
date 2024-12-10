@@ -1,7 +1,7 @@
 import { OgiPrismaService } from '@app/ogi-prisma';
-import { Injectable } from '@nestjs/common';
-import { MasterService } from '../master/master.service';
 import { SecService } from '../sec-bridge/sec.service';
+import { MasterService } from '../master/master.service';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class DirectExportJobOrderService {
@@ -22,8 +22,6 @@ export class DirectExportJobOrderService {
    */
   public async createDirectExportJobOrder() {
     try {
-      const aa = await this.master.findAll();
-      console.log('master findAll', aa);
     } catch (error) {
       console.error('Error in master.findAll:', error);
     }
@@ -31,6 +29,11 @@ export class DirectExportJobOrderService {
     await this.ogiDB.exportJobOrder.findFirst();
     // console.log('data', data);
     console.log('createDirectExportJobOrder');
-    return 'createDirectExportJobOrder';
+    const data = this.master.findAll();
+    data.subscribe((res) => {
+      console.log('res', res);
+    });
+
+    return data;
   }
 }
