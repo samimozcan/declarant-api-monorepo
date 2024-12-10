@@ -5,11 +5,12 @@ import { ClientProxy } from '@nestjs/microservices';
 export class MasterService {
   constructor(@Inject('MASTER_SERVICE') private masterService: ClientProxy) {}
 
-  findAll() {
-    return this.masterService.send('master.getHello', {});
+  async findAll() {
+    console.log('findAll');
+    return this.masterService.send<string>('master.getHello', {});
   }
 
-  justHello() {
+  async justHello() {
     console.log('justHello');
     return this.masterService.send<string>('master.justHello', {});
   }

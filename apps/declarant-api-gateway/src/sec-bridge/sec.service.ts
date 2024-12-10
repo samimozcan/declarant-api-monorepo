@@ -5,11 +5,11 @@ import { ClientProxy } from '@nestjs/microservices';
 export class SecService {
   constructor(@Inject('SEC_SERVICE') private secService: ClientProxy) {}
 
-  findAll() {
+  async findAll() {
     return this.secService.send('sec.getHello', {});
   }
 
-  justHello() {
+  async justHello() {
     console.log('justHello');
     return this.secService.send<string>('sec.getHello', {});
   }

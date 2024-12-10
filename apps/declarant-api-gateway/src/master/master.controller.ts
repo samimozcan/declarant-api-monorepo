@@ -6,8 +6,9 @@ export class MasterController {
   constructor(private readonly masterService: MasterService) {}
 
   @Get()
-  findAll() {
-    return this.masterService.findAll();
+  async findAll() {
+    console.log('master findAll');
+    return await this.masterService.findAll();
   }
 
   @Get('just-hello')

@@ -1,28 +1,26 @@
-import { DirectExportJobOrder } from '@app/common/ogi/direct-export-job-order/types';
-import { DirectExportJobOrderSchema } from '@app/common/ogi/direct-export-job-order/validation/direct-export-job-order.validation';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
+import { DirectExportJobOrderService } from './direct-export-job-order.service';
 
 @Controller('direct-export-job-order')
 export class DirectExportJobOrderController {
-  constructor() {}
+  constructor(
+    private readonly directExportJobOrderService: DirectExportJobOrderService,
+  ) {}
 
   @Get()
   getDirectExportJobOrder(): string {
     return 'Hello World!';
   }
 
-  @Post()
-  async createDirectExportJobOrder(
-    @Body() directExportJobOrder: DirectExportJobOrder,
-  ): Promise<DirectExportJobOrder> {
+  @Post('create')
+  async createDirectExportJobOrder() {
     try {
-      console.log('schema', DirectExportJobOrderSchema);
-      await DirectExportJobOrderSchema.parseAsync(directExportJobOrder);
+      const result =
+        await this.directExportJobOrderService.createDirectExportJobOrder();
+      return result;
     } catch (error) {
-      console.log('error: ', error);
+      console.error('Error in createDirectExportJobOrder:', error);
+      throw error;
     }
-    // console.log('job-order: ', directExportJobOrder);
-
-    return directExportJobOrder;
   }
 }

@@ -12,6 +12,18 @@
       "sourceMaps": true,
       "stopOnEntry": false,
       "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Master Debug Nest Framework",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:debug", "master", "--", "--inspect-brk"],
+      "autoAttachChildProcesses": true,
+      "restart": true,
+      "sourceMaps": true,
+      "stopOnEntry": false,
+      "console": "integratedTerminal"
     }
   ]
 }
