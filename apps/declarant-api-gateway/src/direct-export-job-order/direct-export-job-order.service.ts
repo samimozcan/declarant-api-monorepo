@@ -16,7 +16,6 @@ export class DirectExportJobOrderService {
    * PUBLIC METHODS
    * ------------------------------------------------------
    */
-
   /**
    * Create Direct Export Job Order
    */
