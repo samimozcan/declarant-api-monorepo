@@ -7,6 +7,7 @@ export class MasterService {
 
   async findAll() {
     console.log('findAll');
+    await this.masterService.connect();
     return this.masterService.send<string>('master.getHello', {});
   }
 

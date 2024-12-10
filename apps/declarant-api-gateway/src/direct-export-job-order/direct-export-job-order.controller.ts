@@ -8,7 +8,8 @@ export class DirectExportJobOrderController {
   ) {}
 
   @Get()
-  getDirectExportJobOrder(): string {
+  async getDirectExportJobOrder() {
+    await this.directExportJobOrderService.createDirectExportJobOrder();
     return 'Hello World!';
   }
 

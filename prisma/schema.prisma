@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
 }
 
 datasource db {
@@ -8,38 +9,38 @@ datasource db {
 }
 
 model Certificate {
-  id             String    @id @db.Uuid @map("id")
+  id             String    @id @map("id") @db.Uuid
   documentType   String?   @map("documenttype")
-  jobOrderId     String    @db.Uuid @map("joborderid")
+  jobOrderId     String    @map("joborderid") @db.Uuid
   document       Json?     @map("document")
   version        String?   @map("version")
   status         Int?      @map("status")
   statusTracking Json      @map("statustracking")
-  requestId      String?   @db.Uuid @map("requestid")
-  createdAt      DateTime? @db.Timestamptz(6) @map("createdat")
-  updatedAt      DateTime? @db.Timestamptz(6) @map("updatedat")
+  requestId      String?   @map("requestid") @db.Uuid
+  createdAt      DateTime? @map("createdat") @db.Timestamptz(6)
+  updatedAt      DateTime? @map("updatedat") @db.Timestamptz(6)
 
   @@map("certificate")
 }
 
 model Declaration {
-  id               String    @id @db.Uuid @map("id")
-  jobOrderId       String?   @db.Uuid @map("joborderid")
+  id               String    @id @map("id") @db.Uuid
+  jobOrderId       String?   @map("joborderid") @db.Uuid
   document         Json?     @map("document")
   version          String    @map("version")
-  registrationDate DateTime? @db.Timestamptz(6) @map("registrationdate")
+  registrationDate DateTime? @map("registrationdate") @db.Timestamptz(6)
   status           Int?      @map("status")
   userName         String?   @map("username")
   statusTracking   Json      @map("statustracking")
-  requestId        String?   @db.Uuid @map("requestid")
-  createdAt        DateTime? @db.Timestamptz(6) @map("createdat")
-  updatedAt        DateTime? @db.Timestamptz(6) @map("updatedat")
+  requestId        String?   @map("requestid") @db.Uuid
+  createdAt        DateTime? @map("createdat") @db.Timestamptz(6)
+  updatedAt        DateTime? @map("updatedat") @db.Timestamptz(6)
 
   @@map("declaration")
 }
 
 model ExportJobOrder {
-  id                              String    @id @db.Uuid @map("id")
+  id                              String    @id @map("id") @db.Uuid
   jobOrderType                    String    @map("jobordertype")
   owners                          Json      @map("owners")
   consignorName                   String?   @map("consignorname")
@@ -58,22 +59,22 @@ model ExportJobOrder {
   relations                       Json?     @map("relations")
   vehicleInformation              Json?     @map("vehicleinformation")
   statusTracking                  Json      @map("statustracking")
-  requestId                       String?   @db.Uuid @map("requestid")
-  createdAt                       DateTime? @default(now()) @db.Timestamptz(6) @map("createdat")
-  updatedAt                       DateTime? @default(now()) @db.Timestamptz(6) @map("updatedat")
+  requestId                       String?   @map("requestid") @db.Uuid
+  createdAt                       DateTime? @default(now()) @map("createdat") @db.Timestamptz(6)
+  updatedAt                       DateTime? @default(now()) @map("updatedat") @db.Timestamptz(6)
 
   @@map("exportjoborder")
 }
 
 model File {
-  id               String    @id @db.Uuid @map("id")
-  jobOrderId       String    @db.Uuid @map("joborderid")
+  id               String    @id @map("id") @db.Uuid
+  jobOrderId       String    @map("joborderid") @db.Uuid
   fileName         String    @map("filename")
   fileBusinessType String    @map("filebusinesstype")
   data             Bytes?    @map("data")
   fileType         String    @map("filetype")
-  createdAt        DateTime  @db.Timestamptz(6) @map("createdat")
-  updatedAt        DateTime? @db.Timestamptz(6) @map("updatedat")
+  createdAt        DateTime  @map("createdat") @db.Timestamptz(6)
+  updatedAt        DateTime? @map("updatedat") @db.Timestamptz(6)
 
   @@map("file")
 }
@@ -83,7 +84,7 @@ model History {
   schema         String?   @map("schema")
   documentName   String?   @map("documentname")
   documentId     String?   @map("documentid")
-  registerAt     DateTime? @db.Timestamptz(6) @map("registerat")
+  registerAt     DateTime? @map("registerat") @db.Timestamptz(6)
   operation      String?   @map("operation")
   documentData   Json?     @map("documentdata")
   registerAtUnix Float?    @map("registeratunix")
@@ -92,51 +93,51 @@ model History {
 }
 
 model ImportCertificate {
-  id             String    @id @db.Uuid @map("id")
+  id             String    @id @map("id") @db.Uuid
   documentType   String?   @map("documenttype")
-  jobOrderId     String    @db.Uuid @map("joborderid")
+  jobOrderId     String    @map("joborderid") @db.Uuid
   document       Json?     @map("document")
   version        String?   @map("version")
   status         Int?      @map("status")
   statusTracking Json      @map("statustracking")
-  requestId      String?   @db.Uuid @map("requestid")
-  createdAt      DateTime? @db.Timestamptz(6) @map("createdat")
-  updatedAt      DateTime? @db.Timestamptz(6) @map("updatedat")
+  requestId      String?   @map("requestid") @db.Uuid
+  createdAt      DateTime? @map("createdat") @db.Timestamptz(6)
+  updatedAt      DateTime? @map("updatedat") @db.Timestamptz(6)
 
   @@map("importcertificate")
 }
 
 model ImportDeclaration {
-  id               String    @id @db.Uuid @map("id")
-  jobOrderId       String?   @db.Uuid @map("joborderid")
+  id               String    @id @map("id") @db.Uuid
+  jobOrderId       String?   @map("joborderid") @db.Uuid
   document         Json?     @map("document")
   version          String    @map("version")
-  registrationDate DateTime? @db.Timestamptz(6) @map("registrationdate")
+  registrationDate DateTime? @map("registrationdate") @db.Timestamptz(6)
   status           Int?      @map("status")
   userName         String?   @map("username")
   statusTracking   Json      @map("statustracking")
-  requestId        String?   @db.Uuid @map("requestid")
-  createdAt        DateTime? @db.Timestamptz(6) @map("createdat")
-  updatedAt        DateTime? @db.Timestamptz(6) @map("updatedat")
+  requestId        String?   @map("requestid") @db.Uuid
+  createdAt        DateTime? @map("createdat") @db.Timestamptz(6)
+  updatedAt        DateTime? @map("updatedat") @db.Timestamptz(6)
 
   @@map("importdeclaration")
 }
 
 model ImportFile {
-  id               String    @id @db.Uuid @map("id")
-  jobOrderId       String    @db.Uuid @map("joborderid")
+  id               String    @id @map("id") @db.Uuid
+  jobOrderId       String    @map("joborderid") @db.Uuid
   fileName         String    @map("filename")
   fileBusinessType String    @map("filebusinesstype")
   data             Bytes?    @map("data")
   fileType         String    @map("filetype")
-  createdAt        DateTime  @db.Timestamptz(6) @map("createdat")
-  updatedAt        DateTime? @db.Timestamptz(6) @map("updatedat")
+  createdAt        DateTime  @map("createdat") @db.Timestamptz(6)
+  updatedAt        DateTime? @map("updatedat") @db.Timestamptz(6)
 
   @@map("importfile")
 }
 
 model ImportJobOrder {
-  id                              String    @id @db.Uuid @map("id")
+  id                              String    @id @map("id") @db.Uuid
   jobOrderType                    String    @map("jobordertype")
   owners                          Json      @map("owners")
   consignorName                   String?   @map("consignorname")
@@ -155,16 +156,16 @@ model ImportJobOrder {
   relations                       Json?     @map("relations")
   vehicleInformation              Json?     @map("vehicleinformation")
   statusTracking                  Json      @map("statustracking")
-  requestId                       String?   @db.Uuid @map("requestid")
-  createdAt                       DateTime? @db.Timestamptz(6) @map("createdat")
-  updatedAt                       DateTime? @db.Timestamptz(6) @map("updatedat")
+  requestId                       String?   @map("requestid") @db.Uuid
+  createdAt                       DateTime? @map("createdat") @db.Timestamptz(6)
+  updatedAt                       DateTime? @map("updatedat") @db.Timestamptz(6)
 
   @@map("importjoborder")
 }
 
 model Migration {
   id        Int       @id @map("id")
-  createdAt DateTime? @db.Timestamptz(6) @map("createdat")
+  createdAt DateTime? @map("createdat") @db.Timestamptz(6)
 
   @@map("migration")
 }
@@ -174,10 +175,10 @@ model T1 {
   readers   String?   @map("readers")
   writers   String?   @map("writers")
   deleters  String?   @map("deleters")
-  requestId String?   @db.Uuid @map("requestid")
-  createdAt DateTime? @db.Timestamptz(6) @map("createdat")
-  updatedAt DateTime? @db.Timestamptz(6) @map("updatedat")
-  id        String    @id @db.Uuid @map("id")
+  requestId String?   @map("requestid") @db.Uuid
+  createdAt DateTime? @map("createdat") @db.Timestamptz(6)
+  updatedAt DateTime? @map("updatedat") @db.Timestamptz(6)
+  id        String    @id @map("id") @db.Uuid
   document  Json      @map("document")
   mrnNumber String    @map("mrnnumber")
   version   String?   @map("version")
