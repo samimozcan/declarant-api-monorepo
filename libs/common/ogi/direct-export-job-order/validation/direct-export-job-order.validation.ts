@@ -477,14 +477,6 @@ const DirectExportJobOrderSchema = z
       .nullish(),
     vehicleId: z.string({ message: 'TYPE_ERROR_JOB_ORDER' }).nullish(),
   })
-  .strict({ message: 'ADDITIONAL_PROPERTY_ERROR_JOB_ORDER' })
-  .superRefine((val, ctx) => {
-    if (!val.customsCode) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'CUSTOMS_CODE_MISSING',
-      });
-    }
-  });
+  .strict({ message: 'ADDITIONAL_PROPERTY_ERROR_JOB_ORDER' });
 
 export { DirectExportJobOrderSchema };
