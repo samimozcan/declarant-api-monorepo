@@ -146,6 +146,7 @@ const ItemImportSchema = z
         errorMap: () => ({ message: 'TYPE_ERROR_ITEM' }),
       })
       .nullish(),
+    //   .refine((value) => value >= 0, {}),
     packageQuantity: z
       .number({
         errorMap: () => ({ message: 'VALIDATION_ERROR_ITEM_011' }),
@@ -420,6 +421,11 @@ const DirectImportJobOrderSchema = z
           .length(11, { message: 'VALIDATION_ERROR_JOB_ORDER_009' }),
       )
       .nullish(),
+    contractType: z
+      .string({
+        errorMap: () => ({ message: 'TYPE_ERROR_JOB_ORDER' }),
+      })
+      .nullish(),
     countryOfFirstDestination: z
       .string({
         errorMap: () => ({ message: 'VALIDATION_ERROR_JOB_ORDER_006' }),
@@ -518,6 +524,11 @@ const DirectImportJobOrderSchema = z
     portCode: z
       .string({
         errorMap: () => ({ message: 'VALIDATION_ERROR_JOB_ORDER_010' }),
+      })
+      .nullish(),
+    procedure: z
+      .string({
+        errorMap: () => ({ message: 'TYPE_ERROR_JOB_ORDER' }),
       })
       .nullish(),
     purchaseOrderInfo: z.array(PurchaseOrderInfoSchema).nullish(),
