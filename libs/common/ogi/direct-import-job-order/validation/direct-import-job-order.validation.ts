@@ -571,6 +571,11 @@ const DirectImportJobOrderSchema = z
           .nullish(),
       })
       .nullish(),
+    tradeCountry: z
+      .string({
+        errorMap: () => ({ message: 'TYPE_ERROR_JOB_ORDER' }),
+      })
+      .nullish(),
   })
   .strict({
     message: 'ADDITIONAL_PROPERTY_ERROR_JOB_ORDER',

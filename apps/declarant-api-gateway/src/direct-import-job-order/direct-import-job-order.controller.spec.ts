@@ -9,7 +9,9 @@ describe('DirectImportJobOrderController', () => {
       controllers: [DirectImportJobOrderController],
     }).compile();
 
-    controller = module.get<DirectImportJobOrderController>(DirectImportJobOrderController);
+    controller = module.get<DirectImportJobOrderController>(
+      DirectImportJobOrderController,
+    );
   });
 
   it('should be defined', () => {

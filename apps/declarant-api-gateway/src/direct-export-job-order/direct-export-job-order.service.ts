@@ -26,13 +26,5 @@ export class DirectExportJobOrderService {
     }
     // await this.sec.justHello();
     await this.ogiDB.exportJobOrder.findFirst();
-    // console.log('data', data);
-    console.log('createDirectExportJobOrder');
-    const data = this.master.findAll();
-    data.subscribe((res) => {
-      console.log('res', res);
-    });
-
-    return data;
   }
 }
