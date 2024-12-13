@@ -146,7 +146,6 @@ const ItemImportSchema = z
         errorMap: () => ({ message: 'TYPE_ERROR_ITEM' }),
       })
       .nullish(),
-    //   .refine((value) => value >= 0, {}),
     packageQuantity: z
       .number({
         errorMap: () => ({ message: 'VALIDATION_ERROR_ITEM_011' }),
